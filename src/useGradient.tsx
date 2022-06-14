@@ -4,7 +4,7 @@ import { ChromePicker } from 'react-color';
 import useOutsideAlerter from './useOutsideAlerter';
 import useWindowSize from './useWindowSize';
 
-import './gradient.css';
+import '../css/gradient.css';
 
 
 interface Props {

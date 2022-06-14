@@ -1,3 +1,4 @@
 
+import useGradient from "./src/useGradient";
 
-module.exports = useGradient;
+export default useGradient;
