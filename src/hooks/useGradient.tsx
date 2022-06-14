@@ -105,7 +105,7 @@ const useGradient = ( { baseColors, onChange }: Props ) => {
         e.preventDefault()
         e.stopPropagation()
 
-        let pos = e.clientX - e.target.offsetLeft
+        const pos = e.clientX - e.target.offsetLeft
         if ( dragging && pos <= gradientWidth && pos >= 0 )         
             dragColor(pos / gradientWidth, currentColor)
     }

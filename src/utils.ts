@@ -5,7 +5,7 @@ export const computeGradient = ( colors: TColor[], gradientWidth: number ): stri
     for (let i = 0; i < colors.length; i++) 
     {
         const color = colors[i];
-        let rgb = getColor(color)
+        const rgb = getColor(color)
         gradient += rgb + ` ${color.t * 100}%`
 
         if ( i < colors.length - 1 )
@@ -30,18 +30,17 @@ export const getColorStyle = (color: TColor, gradientWidth: number, width: numbe
 }
 
 export const interpolateColors = (c1: TColor, c2: TColor, w: number): number[] => {
-    var diffW = 1 - w;
-    var rgb = [
+    const diffW = 1 - w;
+    return [
         Math.round(c1.r * diffW + c2.r * w),
         Math.round(c1.g * diffW + c2.g * w),
         Math.round(c1.b * diffW + c2.b * w)
     ];
-    return rgb;
 }
 
 export const getRGBGradient = (colors: TColor[], pos: number): number[] => {
     let c1: TColor = colors[0];
-    let c2: TColor | undefined = undefined; 
+    let c2: TColor | undefined; 
     let x: number = 0;
 
     for (let i = 0; i < colors.length; i++) 
