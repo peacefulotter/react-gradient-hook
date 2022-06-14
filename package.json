@@ -1,0 +1,32 @@
+{
+  "name": "react-gradient-hook",
+  "version": "1.0.0",
+  "description": "React hook to create gradients",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PeacefulOtter/react-gradient.git"
+  },
+  "keywords": [
+    "gradient",
+    "react",
+    "palette",
+    "colors",
+    "color",
+    "coolors",
+    "custom",
+    "user"
+  ],
+  "author": "PeacefulOtter",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.1.0",
+    "react-color": "^2.19.3"
+  },
+  "devDependencies": {
+    "@types/react-color": "^3.0.6"
+  }
+}
