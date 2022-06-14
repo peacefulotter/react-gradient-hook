@@ -4,92 +4,26 @@ import { ChromePicker } from 'react-color';
 import useOutsideAlerter from './useOutsideAlerter';
 import useWindowSize from './useWindowSize';
 
+import { TColor } from '../types';
+
 import '../css/gradient.css';
+import { computeGradient, getColorStyle, getRGBGradient } from '../src/utils';
 
 
 interface Props {
-    baseColors: Color[];
-    onChange: (colors: Color[]) => void;
-}
-
-export type Color = {
-    r: number;
-    g: number;
-    b: number;
-    translate: number;
+    baseColors?: TColor[];
+    onChange?: (colors: TColor[]) => void;
 }
 
 const COLOR_WIDTH = 15;
+const DEFAULT_COLORS: TColor[] = [ 
+    {r: 255, g: 0,   b: 0, t: 0},
+    {r: 255, g: 255, b: 0, t: 0.5},
+    {r: 0,   g: 255, b: 0, t: 1.0},
+]
 
-const computeGradient = ( colors: Color[], gradientWidth: number ): string => {
-    let gradient: string = 'linear-gradient(90deg, ';
-    for (let i = 0; i < colors.length; i++) 
-    {
-        const color = colors[i];
-        let rgb = getColor(color)
-        gradient += rgb + ` ${color.translate * 100}%`
 
-        if ( i < colors.length - 1 )
-            gradient += ', '
-        else 
-            gradient += ')'
-    }    
-
-    return gradient;
-}
-
-const getColor = (color: Color) => {
-    return `rgb(${color.r}, ${color.g}, ${color.b})`
-}
-
-const getColorStyle = (color: Color, gradientWidth: number): object => {    
-    return {
-        width: `${COLOR_WIDTH}px`,
-        background: getColor(color),
-        transform: `translateX(${color.translate * gradientWidth - COLOR_WIDTH / 2}px)`
-    }
-}
-
-const interpolateColors = (c1: Color, c2: Color, w: number): number[] => {
-    var diffW = 1 - w;
-    var rgb = [
-        Math.round(c1.r * diffW + c2.r * w),
-        Math.round(c1.g * diffW + c2.g * w),
-        Math.round(c1.b * diffW + c2.b * w)
-    ];
-    return rgb;
-}
-
-const getRGBGradient = (colors: Color[], pos: number): number[] => {
-    let c1: Color = colors[0];
-    let c2: Color | undefined = undefined; 
-    let x: number = 0;
-
-    for (let i = 0; i < colors.length; i++) 
-    {
-        const w = colors[i].translate
-        if ( w > pos ) 
-        {            
-            c2 = colors[i];
-            if ( i === 0 )
-                x = pos / c1.translate
-            else
-                x = (pos - c1.translate) / (c2.translate - c1.translate) 
-            break;
-        }
-        c1 = colors[i]
-    }
-
-    if ( c2 === undefined )
-    {
-        c2 = colors[colors.length - 1]
-        x = (pos - c1.translate);
-    }    
-       
-    return interpolateColors(c1, c2, x);
-}
-
-const useGradient = ( props: Props ) => {
+const useGradient = ( { baseColors, onChange }: Props ) => {
     const windowWidth = useWindowSize()
 
     const gradientRef = useRef(null)
@@ -102,16 +36,15 @@ const useGradient = ( props: Props ) => {
     const [ disableAdding, setDisable ] = useState<boolean>(false)
     const [ pickerPos, setPickerPos ] = useState<number[]>([0, 0])
     const [ dragging, setDragging ] = useState<boolean>(false)
-    const [ colors, setColors ] = useState<Color[]>(props.baseColors) // set of colors on the gradient
+    const [ colors, setColors ] = useState<TColor[]>(baseColors || DEFAULT_COLORS) // set of colors on the gradient
 
     useOutsideAlerter(colorsRef, colorPickerRef, () => {
         setShowPicker(false); 
         setDragging(false);
     })
 
-    const triggerChange = props.onChange;
 
-    useEffect(() => { triggerChange(colors); }, [])
+    useEffect(() => { if (onChange) onChange(colors); }, [])
 
     useEffect(() => {
         if ( gradientRef.current === null ) 
@@ -129,8 +62,8 @@ const useGradient = ( props: Props ) => {
         const mappedPos = pos / gradientWidth;
         const rgb = getRGBGradient(colors, mappedPos)
                 
-        const newColor: Color = { r: rgb[0], g: rgb[1], b: rgb[2], translate: pos / gradientWidth }
-        const update = [...colors, newColor].sort( (a: Color, b: Color) => a.translate - b.translate );
+        const newColor: TColor = { r: rgb[0], g: rgb[1], b: rgb[2], t: pos / gradientWidth }
+        const update = [...colors, newColor].sort( (a: TColor, b: TColor) => a.t - b.t );
         
         let index = 0;
         for (let i = 0; i < update.length; i++) 
@@ -145,7 +78,7 @@ const useGradient = ( props: Props ) => {
         setColors(update)
         setCurrentColor(index)
 
-        triggerChange(colors)
+        if ( onChange ) onChange(update)
     }
 
     const selectColor = (e: any, i: number) => {           
@@ -163,9 +96,9 @@ const useGradient = ( props: Props ) => {
     const dragColor = (tX: number, i: number) => {
         const copy = [...colors]
         const target = copy[i];
-        target.translate = tX;
+        target.t = tX;
         setColors(copy);
-        triggerChange(colors)
+        if ( onChange ) onChange(copy)
     }
 
     const mouseMove = (e: any) => {
@@ -187,32 +120,30 @@ const useGradient = ( props: Props ) => {
 
     const pickColor = (e: any) => {                
         const copy = [...colors];
-        const target = copy[currentColor]
-        const rgb = e.rgb
-        target.r = rgb.r; 
-        target.g = rgb.g
-        target.b = rgb.b;
+        const { t } = copy[currentColor]
+        const { r, g, b } = e.rgb
+        copy[currentColor] = { r, g, b, t }
         setColors(copy);
-        triggerChange(colors)
+        if ( onChange ) onChange(copy)
     }
 
     const removeColor = (i: number) => {
         if ( colors.length === 2 ) return;
-        const filtered = colors.filter((c: Color, j: number) => i !== j )
+        const filtered = colors.filter((c: TColor, j: number) => i !== j )
         setCurrentColor(Math.max(currentColor - 1, 0))
         setColors(filtered);
-        triggerChange(filtered)
+        if ( onChange ) onChange(filtered)
     }
 
     return (
         <div className="gradient-handler" ref={gradientRef}>
             <div className="gradient-wrapper" style={{background: computeGradient(colors, gradientWidth)}} onClick={addColor} onMouseMove={mouseMove}>
-                { colors.map( (c: Color, i: number) => {
+                { colors.map( (c: TColor, i: number) => {
                     return <div 
                         tabIndex={1}
                         ref={el => (colorsRef as any).current[i] = el}
                         className='gradient-color' 
-                        style={getColorStyle(c, gradientWidth)} 
+                        style={getColorStyle(c, gradientWidth, COLOR_WIDTH)} 
                         onMouseDown={(e) => selectColor(e, i)} 
                         onMouseUp={stopDragging} 
                         key={`gradient-${i}`}>
