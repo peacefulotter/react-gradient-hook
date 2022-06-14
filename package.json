@@ -1,6 +1,6 @@
 {
   "name": "react-gradient-hook",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "React hook to create gradients",
   "main": "index.ts",
   "scripts": {
