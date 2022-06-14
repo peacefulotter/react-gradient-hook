@@ -1,4 +1,4 @@
-import { TColor } from "../types";
+import { TColor } from "./types";
 
 export const computeGradient = ( colors: TColor[], gradientWidth: number ): string => {
     let gradient: string = 'linear-gradient(90deg, ';

@@ -7,7 +7,7 @@ import useWindowSize from './useWindowSize';
 import { TColor } from '../types';
 
 import '../css/gradient.css';
-import { computeGradient, getColorStyle, getRGBGradient } from '../src/utils';
+import { computeGradient, getColorStyle, getRGBGradient } from '../utils';
 
 
 interface Props {

@@ -1,6 +1,6 @@
 {
   "name": "react-gradient-hook",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React hook to create gradients",
   "main": "index.ts",
   "scripts": {
@@ -24,7 +24,8 @@
   "license": "MIT",
   "dependencies": {
     "react": "^18.1.0",
-    "react-color": "^2.19.3"
+    "react-color": "^2.19.3",
+    "react-scripts": "^5.0.1"
   },
   "devDependencies": {
     "@types/react-color": "^3.0.6"
