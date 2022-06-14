@@ -4,10 +4,10 @@ import { ChromePicker } from 'react-color';
 import useOutsideAlerter from './useOutsideAlerter';
 import useWindowSize from './useWindowSize';
 
+import { computeGradient, getColorStyle, getRGBGradient } from '../utils';
 import { TColor } from '../types';
 
 import '../css/gradient.css';
-import { computeGradient, getColorStyle, getRGBGradient } from '../utils';
 
 
 interface Props {

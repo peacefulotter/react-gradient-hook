@@ -1,6 +1,6 @@
 
-import useGradient from "./src/hooks/useGradient";
-import { TColor, Color } from './src/types'
+import useGradient from "./hooks/useGradient";
+import { TColor, Color } from './types'
 
 export { TColor, Color } 
 export default useGradient;
