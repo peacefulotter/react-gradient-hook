@@ -23,9 +23,6 @@ interface ICursor {
 
 const Cursor: FC<ICursor> = ( { color, x, width, setShowPicker, setX } ) => {
 
-    console.log(x, width);
-    
-
     const update = (data: DraggableData) => setX(data.x / width) 
     const onDrag = (_: DraggableEvent, data: DraggableData) => update(data)
     const onStop = (_: DraggableEvent, data: DraggableData) => update(data)

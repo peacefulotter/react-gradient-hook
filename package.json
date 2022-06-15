@@ -1,6 +1,6 @@
 {
   "name": "react-gradient-hook",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "React hook to create gradients",
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -14,7 +14,7 @@
     "build-esm": "tsc --project ./tsconfig.esm.json",
     "build-types": "tsc --project ./tsconfig.types.json",
     "build": "npm run build-cjs && npm run build-esm && npm run build-types && echo 'Successfully built'",
-    "copy-files": "copyfiles -u 1 -E -V  \"src/**/*.*css\" lib/",
+    "copy-files": "copyfiles -u 1 -E -V  \"src/**/*.*css\" lib/ lib/esm/",
     "postbuild": "npm run copy-files",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",

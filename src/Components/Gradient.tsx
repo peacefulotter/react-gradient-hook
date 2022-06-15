@@ -28,7 +28,7 @@ const Gradient: FC<IGradient> = ( { baseColors } ) => {
     const { ref, width } = useRefSize()
 
     const addColor = (e: MouseEvent<HTMLDivElement>) => {
-        console.log(e.target);
+        // console.log(e.target);
         const pos: number = e.clientX  / width // - e.target.offsetLeft // + COLOR_WIDTH / 2
         const rgb = getRGBGradient(colors, xs, pos)
         const update = [...colors, rgb] // .sort( (a: RGB, b: RGB) => a.t - b.t );
@@ -43,16 +43,18 @@ const Gradient: FC<IGradient> = ( { baseColors } ) => {
     }
 
     const setX = (i: number) => (t: number) => {
-        console.log(i, t);
+        // console.log(i, t);
         const copy = [...xs]
         copy[i] = t
         setXs(copy)
     }
 
-    console.log(xs);
-    
-
     // onClick={addColor}
+
+
+    /*
+    positionOffset: {x: number}
+    */
 
     return (
         <div className="gradient-wrapper" ref={ref} style={{background: computeGradient(colors, xs)}} >
