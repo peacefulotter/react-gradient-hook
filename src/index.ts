@@ -1,3 +1,2 @@
-import useGradient from "./hooks/useGradient";
 
-export default useGradient;
+export { default as useGradient } from './hooks/useGradient';
