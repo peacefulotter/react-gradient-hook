@@ -1,8 +1,9 @@
 {
   "name": "react-gradient-hook",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "React hook to create gradients",
   "main": "lib/index.js",
+  "module":"esm/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "jest --config jestconfig.json",
@@ -10,7 +11,10 @@
 
     "clean": "rm -rf ./lib",    
     "prebuild": "npm run clean",
-    "build": "tsc",
+    "build-cjs":"tsc --project ./tsconfig.cjs.json",
+    "build-esm":"tsc --project ./tsconfig.esm.json",
+    "build":"npm run build-cjs && npm run build-esm && npm run build-types && echo 'Successfully built'",
+    "build-types":"tsc --project ./tsconfig.types.json",
     "postbuild": "npm run copy-files",
 
     "prepare": "npm run build",
@@ -22,6 +26,12 @@
     "lint": "tslint -p tsconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\""
   },
+  "browserslist":[
+    ">1%",
+    "last 1 version",
+    "Firefox ESR",
+    "not dead"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PeacefulOtter/react-gradient-hook.git"
@@ -39,7 +49,11 @@
   "files": [
     "lib/**/*"
   ],
-  "author": "PeacefulOtter",
+  "author": {
+    "name": "PeacefulOtter",
+    "email": "nathan.maire@epfl.ch",
+    "url": "https://natmai.netlify.app"
+  },
   "license": "MIT",
   "dependencies": {
     "react": "^18.1.0",
