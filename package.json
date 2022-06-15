@@ -1,32 +1,30 @@
 {
   "name": "react-gradient-hook",
-  "version": "1.1.7",
+  "version": "1.2.0",
   "description": "React hook to create gradients",
   "main": "lib/index.js",
-  "module":"esm/index.js",
+  "module": "esm/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
+    "start": "react-scripts start",
     "test": "jest --config jestconfig.json",
-
-    "clean": "rm -rf ./lib",    
+    "clean": "rm -rf ./lib",
     "prebuild": "npm run clean",
-    "build-cjs":"tsc --project ./tsconfig.cjs.json",
-    "build-esm":"tsc --project ./tsconfig.esm.json",
-    "build-types":"tsc --project ./tsconfig.types.json",
-    "build":"npm run build-cjs && npm run build-esm && npm run build-types && echo 'Successfully built'",
+    "build-cjs": "tsc --project ./tsconfig.cjs.json",
+    "build-esm": "tsc --project ./tsconfig.esm.json",
+    "build-types": "tsc --project ./tsconfig.types.json",
+    "build": "npm run build-cjs && npm run build-esm && npm run build-types && echo 'Successfully built'",
     "copy-files": "copyfiles -u 1 -E -V  \"src/**/*.*css\" lib/",
     "postbuild": "npm run copy-files",
-
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
-
     "lint": "tslint -p tsconfig.json",
     "format": "prettier --write \"src/**/*.ts\""
   },
-  "browserslist":[
+  "browserslist": [
     ">1%",
     "last 1 version",
     "Firefox ESR",
@@ -58,7 +56,7 @@
   "dependencies": {
     "react": "^18.1.0",
     "react-color": "^2.19.3",
-    "react-scripts": "^5.0.1",
+    "react-draggable": "^4.4.5",
     "ts-loader": "^9.3.0"
   },
   "devDependencies": {
@@ -68,8 +66,11 @@
     "@types/react-color": "^3.0.6",
     "babel-loader": "^8.2.5",
     "copy-files": "^0.1.0",
+    "cypress": "^10.1.0",
     "jest": "^28.1.1",
     "prettier": "^2.7.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.5",
     "tslint": "^6.1.3",

@@ -1,12 +1,12 @@
-import { TColor } from "./types";
+import { RGB, TRGB } from "./types";
 
-export const computeGradient = ( colors: TColor[], gradientWidth: number ): string => {
+export const computeGradient = ( colors: RGB[], xs: number[] ): string => {
     let gradient: string = 'linear-gradient(90deg, ';
     for (let i = 0; i < colors.length; i++) 
     {
         const color = colors[i];
-        const rgb = getColor(color)
-        gradient += rgb + ` ${color.t * 100}%`
+        const rgb = getColorString(color)
+        gradient += rgb + ` ${xs[i] * 100}%`
 
         if ( i < colors.length - 1 )
             gradient += ', '
@@ -17,52 +17,45 @@ export const computeGradient = ( colors: TColor[], gradientWidth: number ): stri
     return gradient;
 }
 
-export const getColor = (color: TColor) => {
+export const getColorString = (color: RGB) => {
     return `rgb(${color.r}, ${color.g}, ${color.b})`
 }
 
-export const getColorStyle = (color: TColor, gradientWidth: number, width: number): object => {    
+
+
+export const interpolateColors = (c1: RGB, c2: RGB, x: number): RGB => {
     return {
-        width: `${width}px`,
-        background: getColor(color),
-        transform: `translateX(${color.t * gradientWidth - width / 2}px)`
-    }
+        r: Math.round(c1.r * (1 - x) + c2.r * x),
+        g: Math.round(c1.g * (1 - x) + c2.g * x),
+        b: Math.round(c1.b * (1 - x) + c2.b * x),
+    };
 }
 
-export const interpolateColors = (c1: TColor, c2: TColor, w: number): number[] => {
-    const diffW = 1 - w;
-    return [
-        Math.round(c1.r * diffW + c2.r * w),
-        Math.round(c1.g * diffW + c2.g * w),
-        Math.round(c1.b * diffW + c2.b * w)
-    ];
-}
-
-export const getRGBGradient = (colors: TColor[], pos: number): number[] => {
-    let c1: TColor = colors[0];
-    let c2: TColor | undefined; 
+export const getRGBGradient = (colors: RGB[], xs: number[], pos: number): RGB => {
+    let i1: number = 0;
+    let i2: number | undefined; 
     let x: number = 0;
 
     for (let i = 0; i < colors.length; i++) 
     {
-        const w = colors[i].t
+        const w = xs[i]
         if ( w > pos ) 
         {            
-            c2 = colors[i];
+            i2 = i;
             if ( i === 0 )
-                x = pos / c1.t
+                x = pos / xs[i1]
             else
-                x = (pos - c1.t) / (c2.t - c1.t) 
+                x = (pos - xs[i1]) / (xs[i2] - xs[i1]) 
             break;
         }
-        c1 = colors[i]
+        i1 = i
     }
 
-    if ( c2 === undefined )
+    if ( i2 === undefined )
     {
-        c2 = colors[colors.length - 1]
-        x = (pos - c1.t);
+        i2 = colors.length - 1
+        x = (pos - xs[i1]);
     }    
        
-    return interpolateColors(c1, c2, x);
+    return interpolateColors(colors[i1], colors[i2], x);
 }

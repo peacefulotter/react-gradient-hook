@@ -1,0 +1,23 @@
+
+:root {
+    --cursor-width: 15px;
+    --cursor-border-width: 4px;
+    --cursor-shadow-width: 2px;
+}
+
+
+.cursor-wrapper {
+}
+
+.cursor {
+    width: var(--cursor-width);
+    height: 110%;
+    border-radius: 100px;
+    border: var(--cursor-border-width) solid white;
+    box-shadow: 0 0 0 var(--cursor-shadow-width) black;
+    cursor: move;
+}
+
+
+
+

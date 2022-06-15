@@ -1,75 +1,13 @@
 
-.gradient-handler {
-    width: 90%;
-    margin: 0px auto;
+:root {
+    --gradient-height: 40px;
 }
+
 
 .gradient-wrapper {
     width: 100%;
-    height: 40px;
+    height: var(--gradient-height);
     display: flex;
+    align-items: center;
     border-radius: 7px;
 }
-
-.gradient-color {
-    margin-left: -15px;
-    position: absolute;
-    height: 50px;
-    border: 4px solid white;
-    border-radius: 50px;
-    box-shadow: 0 0 0 1pt black;
-    margin-top: -7px;
-    cursor: move;
-}
-
-
-.colorpicker-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.chrome-picker {
-    margin-right: 25px;
-}
-
-.colors-list {
-    height: 350px;
-    overflow-y: scroll;
-}
-
-.color-details {
-    width: 225px;
-    background-color: white;
-    display: grid;
-    grid-template-columns: auto auto auto 50px;
-    align-items: center;
-}
-
-.color-rgb {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.color-rgb-value {
-    font-size: 1.4em;
-}
-
-.color-rgb-name {
-    color: rgb(98, 98, 98);
-}
-
-.color-remove {
-    font-size: 1.3em;
-    color: rgb(98, 98, 98);
-    text-align: center;
-    cursor: pointer;
-    color: red;
-}
-
-.color-remove:hover {
-    color: rgb(30, 30, 30);
-}
-
