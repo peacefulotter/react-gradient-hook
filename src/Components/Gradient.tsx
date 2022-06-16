@@ -1,76 +1,102 @@
-import { useState, MouseEvent, FC } from "react";
+import { useState, MouseEvent, FC, useCallback } from "react";
 
-import useRefSize from "../hooks/useRefSize";
-import { RGB, TRGB } from "../types";
-import { computeGradient, getRGBGradient } from "../utils";
 import Cursor from "./Cursor";
+import useRefSize from "../hooks/useRefSize";
+import { CursorOptions, GradientOptions, TRGB } from "../types";
+import { computeGradient, getRGBGradient } from "../utils";
+import { defaultColors, gradientOptions, cursorOptions } from "../constants";
 
 import '../css/gradient.css'
+import Picker from "./Picker";
+import { ColorResult } from "react-color";
 
-const DEFAULT_COLORS: RGB[] = [ 
-    { r: 255, g: 0,   b: 0 },
-    { r: 255, g: 255, b: 0 },
-    { r: 0,   g: 255, b: 0 },
-]
-
-const DEFAULT_XS: number[] = [0, 0.5, 1]
+const gradientStyle = (colors: TRGB[], options: GradientOptions) => ( {
+    background: computeGradient(colors), 
+    height: options.height + 'px'
+} )
 
 
 interface IGradient {
-    baseColors?: TRGB[]
+    defaultColors?: TRGB[]
+    gradientOptions?: GradientOptions;
+    cursorOptions?: CursorOptions;
 }
 
-const Gradient: FC<IGradient> = ( { baseColors } ) => {
+const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOptions } ) => {
 
-    const [colors, setColors] = useState<RGB[]>(baseColors || DEFAULT_COLORS)
-    const [xs, setXs] = useState<number[]>(baseColors ? baseColors.map(c => c.t) : DEFAULT_XS)
-    
-    const { ref, width } = useRefSize()
+    const { ref, width, left } = useRefSize()
+    const [colors, setColors] = useState<TRGB[]>(defaultColors)
+    const [selected, setSelected] = useState<number>()
 
-    const addColor = (e: MouseEvent<HTMLDivElement>) => {
-        // console.log(e.target);
-        const pos: number = e.clientX  / width // - e.target.offsetLeft // + COLOR_WIDTH / 2
-        const rgb = getRGBGradient(colors, xs, pos)
-        const update = [...colors, rgb] // .sort( (a: RGB, b: RGB) => a.t - b.t );
+    const cursorWidth = cursorOptions.width + cursorOptions.border  + cursorOptions.shadow
+    const offset = (cursorWidth) / 2
+    const rightX = width - left - offset * 3 / 2
+    const boundX = rightX - offset
+
+    const addColor = useCallback( ({clientX, target}: MouseEvent<HTMLDivElement>) => {
+        // rgb on the gradient (color)
+        const pos = (clientX - (target as any).offsetLeft) / width
+        const rgb = getRGBGradient(colors, pos)
+        // color translation, minus the offset added by react-draggable
+        const dragOffset = (colors.length * cursorWidth) / width
+        const dragRgb = { ...rgb, t: pos - dragOffset }
+        const update = [...colors, dragRgb].sort();
         setColors(update)
         // if ( onChange ) onChange(update)
-    }
+    }, [colors, setColors, width] )
 
-    const setShowPicker = (i: number) => (e: MouseEvent<HTMLDivElement>) => {
-        // console.log(i);
-        // e.preventDefault()
-        // e.stopPropagation()
-    }
+    const onClick = useCallback( (i: number) => (e: MouseEvent<HTMLDivElement>) => {
+        setSelected(i)
+        e.preventDefault()
+        e.stopPropagation()
+    }, [] )
 
-    const setX = (i: number) => (t: number) => {
-        // console.log(i, t);
-        const copy = [...xs]
-        copy[i] = t
-        setXs(copy)
-    }
+    const setX = useCallback( (i: number) => (t: number) => {
+        setColors( prev => {
+            const temp = [...prev]
+            temp[i].t = t
+            return temp
+        } );
+    }, [colors, setColors] )
+    
 
-    // onClick={addColor}
-
-
-    /*
-    positionOffset: {x: number}
-    */
+    const pickColor = useCallback( (i: number) => ({ rgb }: ColorResult) => {
+        setColors( prev => {
+            const temp = [...prev]
+            temp[i].r = rgb.r
+            temp[i].g = rgb.g
+            temp[i].b = rgb.b
+            return temp
+        } );
+    }, [colors, setColors])
 
     return (
-        <div className="gradient-wrapper" ref={ref} style={{background: computeGradient(colors, xs)}} >
-            { colors.map( (c: TRGB, i: number) => {
-                return <Cursor 
-                    key={`cursor-${i}`} 
-                    color={c} 
-                    x={xs[i]}
-                    width={width}
-                    setX={setX(i)}
-                    setShowPicker={setShowPicker(i)}
-                />
-            } ) }
-            {/* { false ? <Picker /> : null } */}
+        <div className="gradient-wrapper" style={{padding: `0px ${offset}px`}}>
+            <div className="gradient" ref={ref} style={gradientStyle(colors, gradientOptions)} onClick={addColor}>
+                { width > 0 && colors.map( (c: TRGB, i: number) => {
+                    console.log((i + 1) >= colors.length);
+                    return <Cursor 
+                        key={`cursor-${i}`} 
+                        color={c} 
+                        left={offset}
+                        right={width}
+                        minX={i == 0 ? 0 : colors[i - 1].t}
+                        maxX={(i + 1) >= colors.length ? 1 : colors[i + 1].t}
+                        setX={setX(i)}
+                        onClick={onClick(i)}
+                        options={cursorOptions}
+                    />
+                } ) }
+            </div>
+            { selected ? <Picker color={colors[selected]} pickColor={pickColor(selected)} /> : null }
         </div>
     )
+}
+
+Gradient.defaultProps = {
+    defaultColors,
+    gradientOptions,
+    cursorOptions
 }
 
 export default Gradient;

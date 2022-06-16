@@ -5,13 +5,13 @@ import Gradient from '../Components/Gradient';
 
 
 interface Props {
-    baseColors?: TRGB[];
+    defaultColors?: TRGB[];
     onChange?: (colors: TRGB[]) => void;
 }
 
-const useGradient = ( { baseColors, onChange }: Props ) => {
+const useGradient = ( { defaultColors, onChange }: Props ) => {
 
-    return <Gradient baseColors={baseColors} />
+    return <Gradient defaultColors={defaultColors} />
 }
 
 export default useGradient;

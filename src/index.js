@@ -2,6 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import useGradient from './hooks/useGradient'
 
+import './index.css'
+
 const App = () => {
     const gradient = useGradient({});
     return (

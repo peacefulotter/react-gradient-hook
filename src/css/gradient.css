@@ -1,13 +1,14 @@
 
-:root {
-    --gradient-height: 40px;
+
+.gradient-wrapper {
+    max-width: 100%;
+    margin: auto;
 }
 
 
-.gradient-wrapper {
-    width: 100%;
-    height: var(--gradient-height);
+.gradient {
+    position: relative;
     display: flex;
     align-items: center;
-    border-radius: 7px;
+    border-radius: 5px;
 }

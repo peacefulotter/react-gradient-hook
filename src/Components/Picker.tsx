@@ -7,11 +7,10 @@ import '../css/picker.css'
 
 interface IPicker {
     color: RGB;
-    removeCursor: () => void;
     pickColor: ColorChangeHandler;
 }
 
-const Picker: FC<IPicker> = ( { color, removeCursor, pickColor } ) => {
+const Picker: FC<IPicker> = ( { color, pickColor } ) => {
     return (
         <ChromePicker 
             color={color} 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
 interface Size {
+	left: number;
 	width: number;
 	height: number;
 }
@@ -8,23 +9,23 @@ interface Size {
 export const useRefSize = () => {
 
     const ref = useRef(null)
-	const [size, setSize] = useState<Size>({ width: 1, height: 1 });
+	const [size, setSize] = useState<Size>({ left: 0, width: 0, height: 0 });
 
-	const handleResize = () => { 
+	const resize = () => { 
 		if ( ref.current === null ) return;
+		// FIXME: + ref.current.clientLeft ??
+		const left = ref.current.offsetLeft
 		const width = ref.current.clientWidth
 		const height = ref.current.clientHeight
-		setSize( { width, height } );
+		setSize( { left, width, height } );
 	}
 
 	useEffect( () => {
-		window.addEventListener('resize', handleResize);
-		return () => window.removeEventListener('resize', handleResize);
+		window.addEventListener('resize', resize);
+		return () => window.removeEventListener('resize', resize);
 	}, [ref] );
 
-	useEffect( () => {
-		handleResize()
-	}, [])
+	useEffect( resize, [])
 
 	return { ref, ...size };
 }
