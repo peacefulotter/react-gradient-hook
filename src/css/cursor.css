@@ -1,9 +1,14 @@
 
+:root {
+    --hover-transition-time: 200ms;
+    --hover-color: rgb(255, 122, 122);
+}
+
 
 .dummy {
     height: 110%;
     position: absolute;
-    cursor: move;
+    cursor: e-resize;
 }
 
 .cursor {
@@ -11,6 +16,48 @@
     border-radius: 100px;
     border-style: solid;
     border-color: white;
+}
+
+.gradient:hover .cursor-text {
+    opacity: 1;
+} 
+
+.cursor-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    padding: 10px;
+    background: white;
+    border-radius: 7px;
+    transform: translate(-35%, -100%);
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+    font-size: 0.8em;
+    line-height: 1em;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity var(--hover-transition-time) ease, background-color var(--hover-transition-time) ease;
+}
+
+.cursor-text:hover {
+    background-color: var(--hover-color);
+}
+
+.cursor-text:hover::after {
+    border-top-color: var(--hover-color);
+}
+
+.cursor-text::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid white;
+    margin-top: 70%;
+    transition: border-top-color var(--hover-transition-time) ease;
 }
 
 

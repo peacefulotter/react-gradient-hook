@@ -1,4 +1,4 @@
-import { useState, MouseEvent, FC, useCallback } from "react";
+import { useState, MouseEvent, FC, useCallback, useEffect } from "react";
 
 import Cursor from "./Cursor";
 import useRefSize from "../hooks/useRefSize";
@@ -29,27 +29,48 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
     const [selected, setSelected] = useState<number>(0)
     // used to prevent the onClick event getting triggered while a cursor is dragged
     const [dragging, setDragging] = useState<boolean>(false)
+    // used to set the `selected` state to the last color that has been added 
+    const [added, setAdded] = useState<number | undefined>()
 
     const cursorWidth = cursorOptions.width + cursorOptions.border * 2
     const offset = cursorWidth / 2
+
+    useEffect( () => {
+        if ( added ) 
+        {
+            setAdded(undefined)
+            setSelected( added )
+        }
+    }, [colors])
 
     const addColor = useCallback( ({clientX, target}: MouseEvent<HTMLDivElement>) => {
         if ( dragging ) return;
         const pos = (clientX - (target as any).offsetLeft) / width
         const rgb = getRGBGradient(colors, pos)
         const trgb = { ...rgb, t: pos }
-        setColors( prev => sortColors([...prev, trgb]) )
+        const update = sortColors([...colors, trgb])
+        setColors( update )
+        setAdded( update.findIndex( (c: TRGB) => c === trgb) )
         // if ( onChange ) onChange(update)
     }, [colors, setColors, width, dragging] )
 
-    const onClick = useCallback( (i: number) => (e: MouseEvent<HTMLDivElement>) => {
-        console.log(i, dragging);
-        
-        if ( dragging ) return;
+    const selectColor = useCallback( (i: number) => (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
         e.stopPropagation()
         setSelected(i)
     }, [dragging, setDragging] )
+
+    const removeColor = useCallback( (i: number) => (e: MouseEvent<SVGElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+        if ( colors.length === 1 ) return;
+        setColors( prev => {
+            const temp = [...prev]
+            temp.splice(i, 1); 
+            return temp;
+        } );
+        setSelected( Math.max(0, selected - 1) )
+    }, [colors, setColors] )
 
     const setX = useCallback( (i: number) => (t: number) => {
         setColors( prev => {
@@ -84,7 +105,8 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
                         minX={minX}
                         maxX={maxX}
                         setX={setX(i)}
-                        onClick={t => onClick(i)(t)}
+                        selectColor={selectColor(i)}
+                        removeColor={removeColor(i)}
                         setDragging={setDragging}
                         options={cursorOptions}
                     />

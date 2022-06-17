@@ -4,8 +4,10 @@ import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import { TRGB, RGB, CursorOptions } from "../types";
 import { getColorString } from "../utils";
 
-import '../css/cursor.css'
 import { DRAGGING_TIMEOUT } from "../constants";
+
+import '../css/cursor.css'
+import CursorTooltip from "./CursorTooltip";
 
 
 const getCursorStyle = (color: RGB, { width, border, shadow }: CursorOptions, selected: boolean): React.CSSProperties => ( {    
@@ -23,16 +25,24 @@ interface ICursor {
     minX: number;
     maxX: number;
     setX: (t: number) => void;
-    onClick: React.MouseEventHandler<HTMLDivElement>;
+    removeColor: (event: MouseEvent<SVGElement>) => void;
+    selectColor: (event: MouseEvent<HTMLDivElement>) => void;
     setDragging: React.Dispatch<React.SetStateAction<boolean>>;
     options: CursorOptions;
 }
 
-const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, onClick, setDragging, options } ) => {
+const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, selectColor, removeColor, setDragging, options } ) => {
 
     const [style, setStyle] = useState<React.CSSProperties>();
 
     const { r, g, b } = color;
+
+    const samples = 40;
+    const gridSpace = width / samples
+
+    const snapToGrid = (x: number) => {
+        return samples ? Math.round(x / gridSpace) * gridSpace : x
+    }
 
     useEffect( () => {
         setStyle(getCursorStyle(color, options, selected))
@@ -41,7 +51,7 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, onClic
     const update = useCallback( (e: DraggableEvent, data: DraggableData) => {
         e.preventDefault()
         e.stopPropagation()
-        setX(data.x / width) 
+        setX(snapToGrid(data.x) / width) 
     }, [] )
     
     const onStart = update
@@ -54,22 +64,27 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, onClic
         setTimeout( () => setDragging(false), DRAGGING_TIMEOUT )
     }
 
+    const x = snapToGrid(color.t * width)
+
     return (
         <Draggable 
             axis="x" 
             handle=".cursor"
-            position={{x: color.t * width, y: 0}}
+            position={{x: x, y: 0}}
             bounds={{left: minX, right: maxX}}
             onStop={onStop} 
             onDrag={onDrag}
             onStart={onStart}
+            grid={[gridSpace, 0]}
         >
             <div className="dummy">
                 <div 
                     className="cursor" 
                     style={style}
-                    onClick={onClick}
-                />
+                    onClick={selectColor}
+                >
+                    <CursorTooltip pos={x / width} onClick={removeColor}/>
+                </div>
             </div>
         </Draggable>
     )
