@@ -26,7 +26,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
 
     const { ref, width, left } = useRefSize()
     const [colors, setColors] = useState<TRGB[]>(sortColors(defaultColors))
-    const [selected, setSelected] = useState<number>()
+    const [selected, setSelected] = useState<number>(0)
     // used to prevent the onClick event getting triggered while a cursor is dragged
     const [dragging, setDragging] = useState<boolean>(false)
 

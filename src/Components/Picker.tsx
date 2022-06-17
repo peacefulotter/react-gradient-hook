@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { ChromePicker, ColorChangeHandler } from "react-color";
+import { ChromePicker, CirclePicker, ColorChangeHandler, SliderPicker } from "react-color";
 
 import { RGB } from "../types";
 
@@ -12,10 +12,15 @@ interface IPicker {
 
 const Picker: FC<IPicker> = ( { color, pickColor } ) => {
     return (
-        <ChromePicker 
-            color={color} 
-            onChange={pickColor} 
-            disableAlpha={true}/>
+        <div className="picker-wrapper"> 
+            <SliderPicker color={color} onChange={pickColor}/>
+            <ChromePicker 
+                color={color} 
+                onChange={pickColor} 
+                disableAlpha={true}/>
+            <CirclePicker color={color} onChange={pickColor} />
+        </div>
+        
     )
 }
 

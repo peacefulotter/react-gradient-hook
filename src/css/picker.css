@@ -1,6 +1,38 @@
 
 
+:root {
+    --picker-height: 100px;
+}
+
+.picker-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto 0px auto;
+    gap: 5%;
+    height: var(--picker-height);
+}
+
+.slider-picker {
+    width: min(100%, 300px) !important;
+}
 
 .chrome-picker {
     display: flex;
+    width: min(100%, 300px) !important;
+}
+
+.chrome-picker div:first-child {
+    padding-bottom: 0px !important;
+    height: var(--picker-height);
+}
+
+.chrome-picker > div:nth-child(2) {
+    display: none !important;
+}
+
+
+.circle-picker span div {
+    width: 20px !important;
+    height: 20px !important;
 }
