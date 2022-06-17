@@ -43,11 +43,11 @@ const Cursor: FC<ICursor> = ( { color, width, minX, maxX, setX, onClick, setDrag
         setX(data.x / width) 
     }, [] )
     
-    const onStart = (e: DraggableEvent, data: DraggableData) => {
+    const onStart = update
+    const onDrag = (e: DraggableEvent, data: DraggableData) => {
         update(e, data)
         setDragging(true)
     }
-    const onDrag = update
     const onStop = (e: DraggableEvent, data: DraggableData) => {
         update(e, data)
         setTimeout( () => setDragging(false), DRAGGING_TIMEOUT )

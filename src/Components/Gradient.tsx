@@ -43,11 +43,13 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
     }, [colors, setColors, width, dragging] )
 
     const onClick = useCallback( (i: number) => (e: MouseEvent<HTMLDivElement>) => {
+        console.log(i, dragging);
+        
         if ( dragging ) return;
         e.preventDefault()
         e.stopPropagation()
         setSelected(i)
-    }, [dragging] )
+    }, [dragging, setDragging] )
 
     const setX = useCallback( (i: number) => (t: number) => {
         setColors( prev => {
@@ -81,7 +83,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
                         minX={minX}
                         maxX={maxX}
                         setX={setX(i)}
-                        onClick={onClick(i)}
+                        onClick={t => onClick(i)(t)}
                         setDragging={setDragging}
                         options={cursorOptions}
                     />
