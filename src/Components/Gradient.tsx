@@ -89,7 +89,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
                     />
                 } ) }
             </div>
-            { selected ? <Picker color={colors[selected]} pickColor={pickColor(selected)} /> : null }
+            { selected !== undefined && <Picker color={colors[selected]} pickColor={pickColor(selected)} />  }
         </div>
     )
 }
