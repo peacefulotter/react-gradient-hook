@@ -1,5 +1,7 @@
 [![License:MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![npm](https://img.shields.io/npm/v/react-gradient-hook)
+![Downloads](https://img.shields.io/github/downloads/peacefulotter/react-gradient-hook/total)
+![GitHub last commit](https://img.shields.io/github/last-commit/peacefulotter/react-gradient-hook)
 ![GitHub stars](https://img.shields.io/github/stars/peacefulotter/react-gradient-hook?style=social)
 
 <div align="center">
