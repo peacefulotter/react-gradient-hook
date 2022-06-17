@@ -35,8 +35,8 @@ export const interpolateColors = (colors: TRGB[], i: number, x: number): TRGB =>
     };
 }
 
-export const getRGBGradient = (colors: TRGB[], pos: number): TRGB => {
+export const getColorOnGradient = (colors: TRGB[], pos: number): TRGB => {
     let i: number = 0;
-    while ( colors[i].t < pos && ++i < colors.length ) {}
+    while ( colors[i].t < pos && ++i < colors.length );
     return interpolateColors(colors, i, pos);
 }

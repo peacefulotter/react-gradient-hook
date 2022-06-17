@@ -64,13 +64,13 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
         setTimeout( () => setDragging(false), DRAGGING_TIMEOUT )
     }
 
-    const x = snapToGrid(color.t * width)
+    const snappedX = snapToGrid(color.t * width)
 
     return (
         <Draggable 
             axis="x" 
             handle=".cursor"
-            position={{x: x, y: 0}}
+            position={{x: snappedX, y: 0}}
             bounds={{left: minX, right: maxX}}
             onStop={onStop} 
             onDrag={onDrag}
@@ -83,7 +83,7 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
                     style={style}
                     onClick={selectColor}
                 >
-                    <CursorTooltip pos={x / width} onClick={removeColor}/>
+                    <CursorTooltip pos={snappedX / width} onClick={removeColor}/>
                 </div>
             </div>
         </Draggable>

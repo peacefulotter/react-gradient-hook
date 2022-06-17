@@ -3,8 +3,8 @@ import { useState, MouseEvent, FC, useCallback, useEffect } from "react";
 import Cursor from "./Cursor";
 import useRefSize from "../hooks/useRefSize";
 import { CursorOptions, GradientOptions, TRGB } from "../types";
-import { computeGradient, getRGBGradient, sortColors } from "../utils";
-import { defaultColors, gradientOptions, cursorOptions } from "../constants";
+import { computeGradient, getColorOnGradient, sortColors } from "../utils";
+import { _defaultColors, _gradientOptions, _cursorOptions } from "../constants";
 
 import '../css/gradient.css'
 import Picker from "./Picker";
@@ -14,7 +14,6 @@ const gradientStyle = (colors: TRGB[], options: GradientOptions) => ( {
     background: computeGradient(colors), 
     height: options.height + 'px'
 } )
-
 
 interface IGradient {
     defaultColors?: TRGB[]
@@ -46,7 +45,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
     const addColor = useCallback( ({clientX, target}: MouseEvent<HTMLDivElement>) => {
         if ( dragging ) return;
         const pos = (clientX - (target as any).offsetLeft) / width
-        const rgb = getRGBGradient(colors, pos)
+        const rgb = getColorOnGradient(colors, pos)
         const trgb = { ...rgb, t: pos }
         const update = sortColors([...colors, trgb])
         setColors( update )
@@ -95,7 +94,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
         <div className="gradient-wrapper" style={{padding: `0px ${offset}px`}}>
             <div className="gradient" ref={ref} style={gradientStyle(colors, gradientOptions)} onClick={addColor}>
                 { width > 0 && colors.map( (c: TRGB, i: number) => {
-                    const minX = i == 0 ? 0 : colors[i - 1].t * width + cursorWidth
+                    const minX = i === 0 ? 0 : colors[i - 1].t * width + cursorWidth
                     const maxX = ((i + 1) >= colors.length ? 1 : colors[i + 1].t - (cursorWidth * 2 / 2) / width) * width
                     return <Cursor 
                         key={`cursor-${i}`} 
@@ -118,9 +117,9 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
 }
 
 Gradient.defaultProps = {
-    defaultColors,
-    gradientOptions,
-    cursorOptions
+    defaultColors: _defaultColors,
+    gradientOptions: _gradientOptions,
+    cursorOptions: _cursorOptions
 }
 
 export default Gradient;
