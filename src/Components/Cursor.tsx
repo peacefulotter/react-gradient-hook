@@ -1,10 +1,11 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, MouseEvent, useCallback, useEffect, useState } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
 import { TRGB, RGB, CursorOptions } from "../types";
 import { getColorString } from "../utils";
 
 import '../css/cursor.css'
+import { DRAGGING_TIMEOUT } from "../constants";
 
 
 const getCursorStyle = (color: RGB, { width, border, shadow }: CursorOptions): React.CSSProperties => ( {    
@@ -12,7 +13,7 @@ const getCursorStyle = (color: RGB, { width, border, shadow }: CursorOptions): R
     width: width + 'px',
     borderWidth: border + 'px',
     boxShadow: `0 0 0 ${shadow}px black`,
-    transform: `translate(-${(width / 2 + border)}px)`
+    transform: `translate(-${(width / 2 + border)}px, -${border}px)`
 } )
 
 interface ICursor {
@@ -21,11 +22,12 @@ interface ICursor {
     minX: number;
     maxX: number;
     setX: (t: number) => void;
-    onClick: React.MouseEventHandler<HTMLDivElement>
+    onClick: React.MouseEventHandler<HTMLDivElement>;
+    setDragging: React.Dispatch<React.SetStateAction<boolean>>;
     options: CursorOptions;
 }
 
-const Cursor: FC<ICursor> = ( { color, width, minX, maxX, setX, onClick, options } ) => {
+const Cursor: FC<ICursor> = ( { color, width, minX, maxX, setX, onClick, setDragging, options } ) => {
 
     const [style, setStyle] = useState<React.CSSProperties>();
 
@@ -41,9 +43,15 @@ const Cursor: FC<ICursor> = ( { color, width, minX, maxX, setX, onClick, options
         setX(data.x / width) 
     }, [] )
     
-    const onStart = update
+    const onStart = (e: DraggableEvent, data: DraggableData) => {
+        update(e, data)
+        setDragging(true)
+    }
     const onDrag = update
-    const onStop = update
+    const onStop = (e: DraggableEvent, data: DraggableData) => {
+        update(e, data)
+        setTimeout( () => setDragging(false), DRAGGING_TIMEOUT )
+    }
 
     return (
         <Draggable 

@@ -27,26 +27,29 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
     const { ref, width, left } = useRefSize()
     const [colors, setColors] = useState<TRGB[]>(sortColors(defaultColors))
     const [selected, setSelected] = useState<number>()
+    // used to prevent the onClick event getting triggered while a cursor is dragged
+    const [dragging, setDragging] = useState<boolean>(false)
 
-    const cursorWidth = cursorOptions.width + cursorOptions.border * 2 // + cursorOptions.shadow * 2
+    const cursorWidth = cursorOptions.width + cursorOptions.border * 2
     const offset = cursorWidth / 2
 
     const addColor = useCallback( ({clientX, target}: MouseEvent<HTMLDivElement>) => {
+        if ( dragging ) return;
         const pos = (clientX - (target as any).offsetLeft) / width
         const rgb = getRGBGradient(colors, pos)
         const trgb = { ...rgb, t: pos }
         setColors( prev => sortColors([...prev, trgb]) )
         // if ( onChange ) onChange(update)
-    }, [colors, setColors, width] )
+    }, [colors, setColors, width, dragging] )
 
     const onClick = useCallback( (i: number) => (e: MouseEvent<HTMLDivElement>) => {
+        if ( dragging ) return;
         e.preventDefault()
         e.stopPropagation()
         setSelected(i)
-    }, [] )
+    }, [dragging] )
 
     const setX = useCallback( (i: number) => (t: number) => {
-        console.log(i, t);
         setColors( prev => {
             const temp = [...prev]
             temp[i].t = t
@@ -79,6 +82,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
                         maxX={maxX}
                         setX={setX(i)}
                         onClick={onClick(i)}
+                        setDragging={setDragging}
                         options={cursorOptions}
                     />
                 } ) }

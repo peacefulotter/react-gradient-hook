@@ -15,3 +15,5 @@ export const cursorOptions: CursorOptions = {
     border: 4,
     shadow: 2,
 }
+
+export const DRAGGING_TIMEOUT = 200
