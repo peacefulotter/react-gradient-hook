@@ -8,16 +8,17 @@ import '../css/cursor.css'
 import { DRAGGING_TIMEOUT } from "../constants";
 
 
-const getCursorStyle = (color: RGB, { width, border, shadow }: CursorOptions): React.CSSProperties => ( {    
+const getCursorStyle = (color: RGB, { width, border, shadow }: CursorOptions, selected: boolean): React.CSSProperties => ( {    
     background: getColorString(color),
     width: width + 'px',
     borderWidth: border + 'px',
-    boxShadow: `0 0 0 ${shadow}px black`,
-    transform: `translate(-${(width / 2 + border)}px, -${border}px)`
+    boxShadow: `0 0 0 ${shadow}px black ${selected ? ', 0px 0px 1px 3px rgba(0, 0, 0, 0.3)': ''}`,
+    transform: `translate(-${(width / 2 + border)}px, -${border}px)`,
 } )
 
 interface ICursor {
     color: TRGB;
+    selected: boolean;
     width: number;
     minX: number;
     maxX: number;
@@ -27,15 +28,15 @@ interface ICursor {
     options: CursorOptions;
 }
 
-const Cursor: FC<ICursor> = ( { color, width, minX, maxX, setX, onClick, setDragging, options } ) => {
+const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, onClick, setDragging, options } ) => {
 
     const [style, setStyle] = useState<React.CSSProperties>();
 
     const { r, g, b } = color;
 
     useEffect( () => {
-        setStyle(getCursorStyle(color, options))
-    }, [r, g, b])
+        setStyle(getCursorStyle(color, options, selected))
+    }, [r, g, b, options, selected])
 
     const update = useCallback( (e: DraggableEvent, data: DraggableData) => {
         e.preventDefault()

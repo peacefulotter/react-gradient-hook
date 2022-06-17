@@ -79,6 +79,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
                     return <Cursor 
                         key={`cursor-${i}`} 
                         color={c} 
+                        selected={i === selected}                        
                         width={width}
                         minX={minX}
                         maxX={maxX}
