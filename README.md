@@ -8,20 +8,40 @@
 <div align="center">
     <h2>react-gradient-hook</h2>
   <p align="center">
-    <img src="./overview.png" alt="" width="850px" />
+    <img style='border-radius: 8px' src="./overview.png" alt="" width="850px" />
   </p>
 </div>
 <br />
 <div>
-  <p align="center">
+  <h3 align="center">
     A react gradient hook for users to create custom gradients.  
-  </p>
+  </h3>
+  <ul style='margin-top: 10px'>
+    <li><b>Typescript</b> support</li>
+    <li><b>Hook</b> and standalone <b>Component</b> available</li>
+  </ul>
 </div>
 
 <div>
   <p align="center">
     <a href="https://react-gradient-hook.netlify.app" target="_blank">
-    Live playground here
+    Live playground here 🎨
     </a>
   </p>
 </div>
+
+# Documentation
+
+TODO
+
+# Examples
+
+```ts
+const Component = (props) => {
+  const gradient = useGradient({options})
+  ...
+  return (
+    { gradient }
+  )
+}
+```
