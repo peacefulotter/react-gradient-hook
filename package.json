@@ -9,13 +9,8 @@
     "start": "react-scripts start",
     "test": "jest --config jestconfig.json",
 
-    "netlify": "npm run build-netlify",
-    "clean-netlify": "rm -rf ./build",
-    "prebuild-netlify": "npm run clean",
-    "build-netlify": "tsc --project ./tsconfig.netlify.json",
-    "copy-files-netlify": "echo '\\033[1;34m copy-files to build/ \\033[0m' && copyfiles -u 1 -E  \"src/**/*.*css\" build/ && echo '\\033[1;34m copy-files to build/ \\033[1;32m Done \\033[0m'",
-    "postbuild-netlify": "echo '\\033[1;34m Postbuilding.. \\033[0m' && npm run copy-files-netlify && echo '\\033[1;34m Postbuild \\033[1;32m Done \\033[0m'",
-
+    "netlify": "react-scripts build",
+    
     "clean": "rm -rf ./lib",
     "prebuild": "npm run clean",
     "build-cjs": "tsc --project ./tsconfig.cjs.json",
