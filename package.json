@@ -67,7 +67,7 @@
     "@types/jest": "^28.1.1",
     "@types/react-color": "^3.0.6",
     "babel-loader": "^8.2.5",
-    "copy-files": "^0.1.0",
+    "copyfiles": "^2.4.1",
     "cypress": "^10.1.0",
     "jest": "^28.1.1",
     "prettier": "^2.7.0",
