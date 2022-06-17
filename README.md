@@ -8,7 +8,7 @@
 <div align="center">
     <h2>react-gradient-hook</h2>
   <p align="center">
-    <!-- <img src="./logo.png" alt="" width="750px" /> -->
+    <img src="./overview.png" alt="" width="850px" />
   </p>
 </div>
 <br />
