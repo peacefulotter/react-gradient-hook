@@ -2,6 +2,7 @@
 ![npm](https://img.shields.io/npm/v/react-gradient-hook)
 ![Downloads](https://img.shields.io/github/downloads/peacefulotter/react-gradient-hook/total)
 ![GitHub last commit](https://img.shields.io/github/last-commit/peacefulotter/react-gradient-hook)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/48c9fde3-3471-4408-9f78-0528bc484cc1/deploy-status)](https://app.netlify.com/sites/react-gradient-hook/deploys)
 ![GitHub stars](https://img.shields.io/github/stars/peacefulotter/react-gradient-hook?style=social)
 
 <div align="center">
