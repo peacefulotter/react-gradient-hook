@@ -20,7 +20,7 @@
 
 <div>
   <p align="center">
-    <a href="https://peacefulotter.github.io/react-gradient-hook/" target="_blank">
+    <a href="https://react-gradient-hook.netlify.app" target="_blank">
     Live playground here
     </a>
   </p>
