@@ -2,9 +2,16 @@ import { RGB, TRGB } from "./types";
 
 const gradColor = (color: TRGB) => getColorString(color) + ` ${color.t * 100}%`
 
+
+export const sortColors = ( colors: TRGB[] ) => [...colors].sort( (a: TRGB, b: TRGB) => a.t - b.t )
+
 export const computeGradient = ( colors: TRGB[] ): string => {
-    return [...colors]
-        .sort( (a: TRGB, b: TRGB) => a.t - b.t )
+    if ( colors.length === 0 )
+        return 'black';
+    else if ( colors.length === 1 )
+        return getColorString(colors[0])
+    
+    return sortColors( colors )
         .reduce( (acc, cur, i) =>  
             acc + gradColor(cur) + (i === colors.length - 1 ? '' : ','), 
             'linear-gradient(90deg, '

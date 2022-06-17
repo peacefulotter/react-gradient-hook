@@ -1,11 +1,16 @@
 
 
-.cursor {
+.dummy {
     height: 110%;
+    position: absolute;
+    cursor: move;
+}
+
+.cursor {
+    height: 100%;
     border-radius: 100px;
     border-style: solid;
     border-color: white;
-    cursor: move;
 }
 
 

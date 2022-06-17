@@ -14,7 +14,8 @@ const Picker: FC<IPicker> = ( { color, pickColor } ) => {
     return (
         <ChromePicker 
             color={color} 
-            onChange={pickColor} />
+            onChange={pickColor} 
+            disableAlpha={true}/>
     )
 }
 

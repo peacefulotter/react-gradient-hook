@@ -12,12 +12,12 @@ const getCursorStyle = (color: RGB, { width, border, shadow }: CursorOptions): R
     width: width + 'px',
     borderWidth: border + 'px',
     boxShadow: `0 0 0 ${shadow}px black`,
+    transform: `translate(-${(width / 2 + border)}px)`
 } )
 
 interface ICursor {
     color: TRGB;
-    left: number;
-    right: number;
+    width: number;
     minX: number;
     maxX: number;
     setX: (t: number) => void;
@@ -25,16 +25,11 @@ interface ICursor {
     options: CursorOptions;
 }
 
-const Cursor: FC<ICursor> = ( { color, left, right, minX, maxX, setX, onClick, options } ) => {
+const Cursor: FC<ICursor> = ( { color, width, minX, maxX, setX, onClick, options } ) => {
 
     const [style, setStyle] = useState<React.CSSProperties>();
 
     const { r, g, b } = color;
-
-    const scale = right - left;
-
-    console.log(left, right, minX, maxX);
-    
 
     useEffect( () => {
         setStyle(getCursorStyle(color, options))
@@ -43,7 +38,7 @@ const Cursor: FC<ICursor> = ( { color, left, right, minX, maxX, setX, onClick, o
     const update = useCallback( (e: DraggableEvent, data: DraggableData) => {
         e.preventDefault()
         e.stopPropagation()
-        setX(data.x) 
+        setX(data.x / width) 
     }, [] )
     
     const onStart = update
@@ -54,18 +49,19 @@ const Cursor: FC<ICursor> = ( { color, left, right, minX, maxX, setX, onClick, o
         <Draggable 
             axis="x" 
             handle=".cursor"
-            position={{x: color.t * scale, y: 0}}
+            position={{x: color.t * width, y: 0}}
             bounds={{left: minX, right: maxX}}
             onStop={onStop} 
             onDrag={onDrag}
             onStart={onStart}
-            // scale={right - left}
         >
-            <div 
-                className="cursor" 
-                style={style}
-                onClick={onClick}
-            />
+            <div className="dummy">
+                <div 
+                    className="cursor" 
+                    style={style}
+                    onClick={onClick}
+                />
+            </div>
         </Draggable>
     )
 }

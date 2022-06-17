@@ -3,7 +3,7 @@ import { useState, MouseEvent, FC, useCallback } from "react";
 import Cursor from "./Cursor";
 import useRefSize from "../hooks/useRefSize";
 import { CursorOptions, GradientOptions, TRGB } from "../types";
-import { computeGradient, getRGBGradient } from "../utils";
+import { computeGradient, getRGBGradient, sortColors } from "../utils";
 import { defaultColors, gradientOptions, cursorOptions } from "../constants";
 
 import '../css/gradient.css'
@@ -25,33 +25,28 @@ interface IGradient {
 const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOptions } ) => {
 
     const { ref, width, left } = useRefSize()
-    const [colors, setColors] = useState<TRGB[]>(defaultColors)
+    const [colors, setColors] = useState<TRGB[]>(sortColors(defaultColors))
     const [selected, setSelected] = useState<number>()
 
-    const cursorWidth = cursorOptions.width + cursorOptions.border  + cursorOptions.shadow
-    const offset = (cursorWidth) / 2
-    const rightX = width - left - offset * 3 / 2
-    const boundX = rightX - offset
+    const cursorWidth = cursorOptions.width + cursorOptions.border * 2 // + cursorOptions.shadow * 2
+    const offset = cursorWidth / 2
 
     const addColor = useCallback( ({clientX, target}: MouseEvent<HTMLDivElement>) => {
-        // rgb on the gradient (color)
         const pos = (clientX - (target as any).offsetLeft) / width
         const rgb = getRGBGradient(colors, pos)
-        // color translation, minus the offset added by react-draggable
-        const dragOffset = (colors.length * cursorWidth) / width
-        const dragRgb = { ...rgb, t: pos - dragOffset }
-        const update = [...colors, dragRgb].sort();
-        setColors(update)
+        const trgb = { ...rgb, t: pos }
+        setColors( prev => sortColors([...prev, trgb]) )
         // if ( onChange ) onChange(update)
     }, [colors, setColors, width] )
 
     const onClick = useCallback( (i: number) => (e: MouseEvent<HTMLDivElement>) => {
-        setSelected(i)
         e.preventDefault()
         e.stopPropagation()
+        setSelected(i)
     }, [] )
 
     const setX = useCallback( (i: number) => (t: number) => {
+        console.log(i, t);
         setColors( prev => {
             const temp = [...prev]
             temp[i].t = t
@@ -74,14 +69,14 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
         <div className="gradient-wrapper" style={{padding: `0px ${offset}px`}}>
             <div className="gradient" ref={ref} style={gradientStyle(colors, gradientOptions)} onClick={addColor}>
                 { width > 0 && colors.map( (c: TRGB, i: number) => {
-                    console.log((i + 1) >= colors.length);
+                    const minX = i == 0 ? 0 : colors[i - 1].t * width + cursorWidth
+                    const maxX = ((i + 1) >= colors.length ? 1 : colors[i + 1].t - (cursorWidth * 2 / 2) / width) * width
                     return <Cursor 
                         key={`cursor-${i}`} 
                         color={c} 
-                        left={offset}
-                        right={width}
-                        minX={i == 0 ? 0 : colors[i - 1].t}
-                        maxX={(i + 1) >= colors.length ? 1 : colors[i + 1].t}
+                        width={width}
+                        minX={minX}
+                        maxX={maxX}
                         setX={setX(i)}
                         onClick={onClick(i)}
                         options={cursorOptions}
