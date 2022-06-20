@@ -1,29 +1,25 @@
 import { useState, MouseEvent, FC, useCallback, useEffect } from "react";
+import { ColorResult } from "react-color";
 
 import Cursor from "./Cursor";
+import Picker from "./Picker";
 import useRefSize from "../hooks/useRefSize";
-import { CursorOptions, GradientOptions, TRGB } from "../types";
+
+import { GradientOptions, IGradient, TRGB } from "../types";
 import { computeGradient, getColorOnGradient, sortColors } from "../utils";
-import { _defaultColors, _gradientOptions, _cursorOptions } from "../constants";
+import { _defaultColors, _gradientOptions, _cursorOptions, _pickerOptions } from "../constants";
 
 import '../css/gradient.css'
-import Picker from "./Picker";
-import { ColorResult } from "react-color";
 
 const gradientStyle = (colors: TRGB[], options: GradientOptions) => ( {
     background: computeGradient(colors), 
     height: options.height + 'px'
 } )
 
-interface IGradient {
-    defaultColors?: TRGB[]
-    gradientOptions?: GradientOptions;
-    cursorOptions?: CursorOptions;
-}
 
-const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOptions } ) => {
+const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOptions, pickerOptions, onChange } ) => {
 
-    const { ref, width, left } = useRefSize()
+    const { ref, width } = useRefSize()
     const [colors, setColors] = useState<TRGB[]>(sortColors(defaultColors))
     const [selected, setSelected] = useState<number>(0)
     // used to prevent the onClick event getting triggered while a cursor is dragged
@@ -31,16 +27,23 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
     // used to set the `selected` state to the last color that has been added 
     const [added, setAdded] = useState<number | undefined>()
 
-    const cursorWidth = cursorOptions.width + cursorOptions.border * 2
+    /** OPTIONS - resolve undefined keys with default values **/
+    const defGradOpts = Object.assign(_gradientOptions, gradientOptions);
+    const defCursOpts = Object.assign(_cursorOptions, cursorOptions);
+    const defPickOpts = Object.assign(_pickerOptions, pickerOptions);
+
+    const cursorWidth = defCursOpts.width + defCursOpts.border * 2
     const offset = cursorWidth / 2
 
     useEffect( () => {
+        onChange && onChange(colors)
+        
         if ( added ) 
         {
             setAdded(undefined)
             setSelected( added )
         }
-    }, [colors])
+    }, [colors]) 
 
     const addColor = useCallback( ({clientX, target}: MouseEvent<HTMLDivElement>) => {
         if ( dragging ) return;
@@ -50,7 +53,6 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
         const update = sortColors([...colors, trgb])
         setColors( update )
         setAdded( update.findIndex( (c: TRGB) => c === trgb) )
-        // if ( onChange ) onChange(update)
     }, [colors, setColors, width, dragging] )
 
     const selectColor = useCallback( (i: number) => (e: MouseEvent<HTMLDivElement>) => {
@@ -92,7 +94,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
 
     return (
         <div className="gradient-wrapper" style={{padding: `0px ${offset}px`}}>
-            <div className="gradient" ref={ref} style={gradientStyle(colors, gradientOptions)} onClick={addColor}>
+            <div className="gradient" ref={ref} style={gradientStyle(colors, defGradOpts)} onClick={addColor}>
                 { width > 0 && colors.map( (c: TRGB, i: number) => {
                     const minX = i === 0 ? 0 : colors[i - 1].t * width + cursorWidth
                     const maxX = ((i + 1) >= colors.length ? 1 : colors[i + 1].t - (cursorWidth * 2 / 2) / width) * width
@@ -107,11 +109,11 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
                         selectColor={selectColor(i)}
                         removeColor={removeColor(i)}
                         setDragging={setDragging}
-                        options={cursorOptions}
+                        options={defCursOpts}
                     />
                 } ) }
             </div>
-            { selected !== undefined && <Picker color={colors[selected]} pickColor={pickColor(selected)} />  }
+            <Picker color={colors[selected]} pickColor={pickColor(selected)} options={defPickOpts} />
         </div>
     )
 }
@@ -119,7 +121,8 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
 Gradient.defaultProps = {
     defaultColors: _defaultColors,
     gradientOptions: _gradientOptions,
-    cursorOptions: _cursorOptions
+    cursorOptions: _cursorOptions,
+    pickerOptions: _pickerOptions,
 }
 
 export default Gradient;

@@ -1,17 +1,11 @@
 
-import { TRGB } from '../types';
 
 import Gradient from '../Components/Gradient';
+import { IGradient } from '../types';
 
 
-interface Props {
-    defaultColors?: TRGB[];
-    onChange?: (colors: TRGB[]) => void;
-}
-
-const useGradient = ( { defaultColors, onChange }: Props ) => {
-
-    return <Gradient defaultColors={defaultColors} />
+const useGradient = ( props: IGradient ) => {
+    return <Gradient {...props} />
 }
 
 export default useGradient;

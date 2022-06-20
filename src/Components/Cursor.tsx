@@ -1,13 +1,13 @@
 import { FC, MouseEvent, useCallback, useEffect, useState } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
+import CursorTooltip from "./CursorTooltip";
+
 import { TRGB, RGB, CursorOptions } from "../types";
+import { DRAGGING_TIMEOUT } from "../constants";
 import { getColorString } from "../utils";
 
-import { DRAGGING_TIMEOUT } from "../constants";
-
 import '../css/cursor.css'
-import CursorTooltip from "./CursorTooltip";
 
 
 const getCursorStyle = (color: RGB, { width, border, shadow }: CursorOptions, selected: boolean): React.CSSProperties => ( {    
@@ -28,7 +28,7 @@ interface ICursor {
     removeColor: (event: MouseEvent<SVGElement>) => void;
     selectColor: (event: MouseEvent<HTMLDivElement>) => void;
     setDragging: React.Dispatch<React.SetStateAction<boolean>>;
-    options: CursorOptions;
+    options: Required<CursorOptions>;
 }
 
 const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, selectColor, removeColor, setDragging, options } ) => {
@@ -36,31 +36,33 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
     const [style, setStyle] = useState<React.CSSProperties>();
 
     const { r, g, b } = color;
+    const { scale, grid, samples } = options;
 
-    const samples = 40;
     const gridSpace = width / samples
 
     const snapToGrid = (x: number) => {
-        return samples ? Math.round(x / gridSpace) * gridSpace : x
+        return (grid && samples) ? Math.round(x / gridSpace) * gridSpace : x
     }
 
     useEffect( () => {
         setStyle(getCursorStyle(color, options, selected))
     }, [r, g, b, options, selected])
 
-    const update = useCallback( (e: DraggableEvent, data: DraggableData) => {
+    const preventProp = (e: DraggableEvent) => {
         e.preventDefault()
         e.stopPropagation()
-        setX(snapToGrid(data.x) / width) 
-    }, [] )
-    
-    const onStart = update
-    const onDrag = (e: DraggableEvent, data: DraggableData) => {
-        update(e, data)
-        setDragging(true)
     }
+
+    const onStart = preventProp
+    
+    const onDrag = useCallback( (e: DraggableEvent, data: DraggableData) => {
+        preventProp(e)
+        setX(snapToGrid(data.x) / width) 
+        setDragging(true)
+    }, [] )
+
     const onStop = (e: DraggableEvent, data: DraggableData) => {
-        update(e, data)
+        preventProp(e)
         setTimeout( () => setDragging(false), DRAGGING_TIMEOUT )
     }
 
@@ -75,7 +77,7 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
             onStop={onStop} 
             onDrag={onDrag}
             onStart={onStart}
-            grid={[gridSpace, 0]}
+            grid={grid ? [gridSpace, 0] : undefined}
         >
             <div className="dummy">
                 <div 
@@ -83,7 +85,7 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
                     style={style}
                     onClick={selectColor}
                 >
-                    <CursorTooltip pos={snappedX / width} onClick={removeColor}/>
+                    <CursorTooltip pos={snappedX / width} scale={scale} onClick={removeColor}/>
                 </div>
             </div>
         </Draggable>

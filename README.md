@@ -30,12 +30,8 @@
   </p>
 </div>
 
-# Documentation
-
-TODO
-
 # Examples
-
+ - As a hook
 ```ts
 const Component = (props) => {
   const gradient = useGradient({options})
@@ -45,3 +41,37 @@ const Component = (props) => {
   )
 }
 ```
+
+ - As a Component
+
+
+ - `defaultColors` (optional, type: `TRGB[]`): Array of default colors for the gradient
+```ts
+type TRGB = {
+  r: number, 
+  g: number, 
+  b: number, 
+  t: number
+}
+```
+
+- `onChange` (optional): function triggered when the gradient changes (different colors, a cursor is moved, ...)
+```ts
+onChange: (colors: TRGB[]) => void;
+```
+
+- `gradientOptions` (optional): Options to change the way the gradient is displayed
+  - `height` (optional, type: number, default: 45): Control the gradients height in pixels
+
+- `cursorOptions` (optional): Options to control the behavior of the cursors (i.e. colors on the gradient)
+  - `width` (optional, type: number, default: 15)
+  - `border` (optional, type: number, default: 4)
+  - `shadow` (optional, type: number, default: 2)
+  - `scale` (optional, type: number, default: 5)
+  - `grid` (optional, type: boolean, default: false)
+  - `samples` (optional, type: number, default: 0): Number of steps the cursors can take. <b>Only works</b> if `grid` is set to `true`
+
+- `pickerOptions` (optional): Options to control the color pickers under the gradient
+  -  `showHue` (optional, type: boolean, default: true)
+  -  `showChrome` (optional, type: boolean, default: true)
+  -  `showCircles` (optional, type: boolean, default: true)

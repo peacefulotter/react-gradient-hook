@@ -8,9 +8,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px auto 0px auto;
     gap: 5%;
+    width: 100%;
     height: var(--picker-height);
+    margin: 20px auto 0px auto;
 }
 
 .slider-picker {
@@ -31,6 +32,10 @@
     display: none !important;
 }
 
+
+.circle-picker span {
+    flex: 1 0 15%;
+}
 
 .circle-picker span div {
     width: 20px !important;
