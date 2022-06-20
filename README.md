@@ -34,7 +34,7 @@
  - As a hook
 ```ts
 const Component = (props) => {
-  const gradient = useGradient({options})
+  const [colors, gradient] = useGradient({options})
   ...
   return (
     { gradient }

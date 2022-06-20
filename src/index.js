@@ -5,7 +5,7 @@ import useGradient from './hooks/useGradient'
 import './index.css'
 
 const App = () => {
-    const gradient = useGradient({});
+    const [colors, gradient] = useGradient({});
     return (
         <div style={{marginTop: '300px'}}>
             {gradient}

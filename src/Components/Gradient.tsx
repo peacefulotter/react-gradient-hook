@@ -5,7 +5,7 @@ import Cursor from "./Cursor";
 import Picker from "./Picker";
 import useRefSize from "../hooks/useRefSize";
 
-import { GradientOptions, IGradient, TRGB } from "../types";
+import { GradientOptions, GradientProps, TRGB } from "../types";
 import { computeGradient, getColorOnGradient, sortColors } from "../utils";
 import { _defaultColors, _gradientOptions, _cursorOptions, _pickerOptions } from "../constants";
 
@@ -16,6 +16,9 @@ const gradientStyle = (colors: TRGB[], options: GradientOptions) => ( {
     height: options.height + 'px'
 } )
 
+interface IGradient extends GradientProps {
+    onChange?: (colors: TRGB[]) => void;
+}
 
 const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOptions, pickerOptions, onChange } ) => {
 
@@ -37,7 +40,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
 
     useEffect( () => {
         onChange && onChange(colors)
-        
+
         if ( added ) 
         {
             setAdded(undefined)

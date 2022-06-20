@@ -9,12 +9,11 @@ export interface TRGB extends RGB {
     t: number;
 }
 
-export interface IGradient {
+export interface GradientProps {
     defaultColors?: TRGB[]
     gradientOptions?: GradientOptions;
     cursorOptions?: CursorOptions;
     pickerOptions?: PickerOptions;
-    onChange?: (colors: TRGB[]) => void;
 }
 
 export interface CursorOptions {
