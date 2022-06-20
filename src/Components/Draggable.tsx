@@ -29,7 +29,7 @@ const Draggable: FC<IDraggable> = ( { x, bounds, scale, grid, onStart, onDrag, o
 
     const onMouseMove = useCallback( (e: MouseEvent) => {
         if ( !drag ) return;
-        console.log(pos, e.clientX);
+        // console.log(pos, e.clientX);
         setPos(fitBounds(e.clientX, bounds))
         onDrag(e, pos)
     }, [drag, setPos] )
@@ -44,13 +44,13 @@ const Draggable: FC<IDraggable> = ( { x, bounds, scale, grid, onStart, onDrag, o
     }, [drag])
     
     const _onStart = (e: any) => {
-        console.log('start');
+        // console.log('start');
         setDrag(true)
         onStart(e, pos)
     } 
 
     const _onStop = (e: any) => {
-        console.log('stop');
+        // console.log('stop');
         setDrag(false)
         onStop(e, pos)
     } 
