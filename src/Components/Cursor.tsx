@@ -25,7 +25,7 @@ interface ICursor {
     minX: number;
     maxX: number;
     setX: (t: number) => void;
-    removeColor: (event: MouseEvent<SVGElement>) => void;
+    removeColor: (event: MouseEvent<HTMLDivElement>) => void;
     selectColor: (event: MouseEvent<HTMLDivElement>) => void;
     setDragging: React.Dispatch<React.SetStateAction<boolean>>;
     options: Required<CursorOptions>;
@@ -36,17 +36,22 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
     const [style, setStyle] = useState<React.CSSProperties>();
 
     const { r, g, b } = color;
-    const { scale, grid, samples } = options;
+    const { border, shadow, scale, grid, samples } = options;
 
     const gridSpace = width / samples
 
     const snapToGrid = (x: number) => {
-        return (grid && samples) ? Math.round(x / gridSpace) * gridSpace : x
+        if ( grid && samples )
+        {
+            const gridX = Math.round(x / gridSpace) * gridSpace;
+            return gridX > minX && gridX < maxX ? gridX : x
+        }
+        return x
     }
 
     useEffect( () => {
         setStyle(getCursorStyle(color, options, selected))
-    }, [r, g, b, options, selected])
+    }, [r, g, b, options.width, border, shadow, selected])
 
     const preventProp = (e: DraggableEvent) => {
         e.preventDefault()
@@ -79,14 +84,9 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
             onStart={onStart}
             grid={grid ? [gridSpace, 0] : undefined}
         >
-            <div className="dummy">
-                <div 
-                    className="cursor" 
-                    style={style}
-                    onClick={selectColor}
-                >
-                    <CursorTooltip pos={snappedX / width} scale={scale} onClick={removeColor}/>
-                </div>
+            <div className="dummy" style={{width: 'fit-content'}}>
+                <CursorTooltip pos={snappedX / width} scale={scale} onClick={removeColor}/>
+                <div className="cursor" style={style} onClick={selectColor}></div> 
             </div>
         </Draggable>
     )

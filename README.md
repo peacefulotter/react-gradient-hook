@@ -82,9 +82,9 @@ type TRGB = {
   - `width` (optional, type: number, default: 15)
   - `border` (optional, type: number, default: 4)
   - `shadow` (optional, type: number, default: 2)
-  - `scale` (optional, type: number, default: 5)
+  - `scale` (optional, type: number, default: 1)
   - `grid` (optional, type: boolean, default: false)
-  - `samples` (optional, type: number, default: 0): Number of steps the cursors can take. <b>Only works</b> if `grid` is set to `true`
+  - `samples` (optional, type: number, default: 20): Number of steps the cursors can take. <b>Only works</b> if `grid` is set to `true`
 
 - `pickerOptions` (optional): Options to control the color pickers under the gradient
   -  `showHue` (optional, type: boolean, default: true)

@@ -5,7 +5,7 @@ import { FiTrash2 } from 'react-icons/fi'
 interface ICursortTooltip {
     pos: number;
     scale: number;
-    onClick: (event: MouseEvent<SVGElement>) => void;
+    onClick: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 const accuracy = 1000;
@@ -18,7 +18,7 @@ const CursorTooltip: FC<ICursortTooltip> = ( { pos, scale, onClick } ) => {
     const getText = () => Math.round(pos * scale * accuracy) / accuracy
 
     useEffect( () => {
-        setText( isHover ? <FiTrash2 onClick={onClick}/> : getText() )
+        setText( isHover ? <FiTrash2 /> : getText() )
     }, [isHover, pos, onClick])
 
     return (
@@ -26,6 +26,7 @@ const CursorTooltip: FC<ICursortTooltip> = ( { pos, scale, onClick } ) => {
             className="cursor-text"
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
+            onClick={onClick}
         >
             {text}
         </div>

@@ -4,6 +4,7 @@ import { ColorResult } from "react-color";
 import Cursor from "./Cursor";
 import Picker from "./Picker";
 import useRefSize from "../hooks/useRefSize";
+import useOptions from "../hooks/useOptions";
 
 import { GradientOptions, GradientProps, TRGB } from "../types";
 import { computeGradient, getColorOnGradient, sortColors } from "../utils";
@@ -31,9 +32,9 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
     const [added, setAdded] = useState<number | undefined>()
 
     /* OPTIONS - resolve undefined keys with default values */
-    const defGradOpts = Object.assign(_gradientOptions, gradientOptions);
-    const defCursOpts = Object.assign(_cursorOptions, cursorOptions);
-    const defPickOpts = Object.assign(_pickerOptions, pickerOptions);
+    const defGradOpts = useOptions(gradientOptions, _gradientOptions)
+    const defCursOpts = useOptions(cursorOptions, _cursorOptions)
+    const defPickOpts = useOptions(pickerOptions, _pickerOptions)
 
     const cursorWidth = defCursOpts.width + defCursOpts.border * 2
     const offset = cursorWidth / 2
@@ -64,7 +65,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
         setSelected(i)
     }, [dragging, setDragging] )
 
-    const removeColor = useCallback( (i: number) => (e: MouseEvent<SVGElement>) => {
+    const removeColor = useCallback( (i: number) => (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault()
         e.stopPropagation()
         if ( colors.length === 1 ) return;
