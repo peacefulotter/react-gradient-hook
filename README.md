@@ -18,7 +18,10 @@
   </h3>
   <ul style='margin-top: 10px'>
     <li><b>Typescript</b> support</li>
-    <li><b>Hook</b> and standalone <b>Component</b> available</li>
+    <li>Both <b>Hook</b> and standalone <b>Component</b> available</li>
+     <li>Highly customizable</li>
+    <li>Lightweight: <b> <100 kB </b> </li>
+    <li>Uses react-color for the color pickers</li>
   </ul>
 </div>
 
@@ -31,7 +34,7 @@
 </div>
 
 # Examples
- - As a hook
+ - As a <b>hook</b>
 ```ts
 const Component = (props) => {
   const [colors, gradient] = useGradient({options})
@@ -42,10 +45,21 @@ const Component = (props) => {
 }
 ```
 
- - As a Component
+ - As a <b>Component</b>
+```ts
+const Component = (props) => {
+  ...
+  return (
+    <Gradient {...options} />
+  )
+}
+```
 
 
- - `defaultColors` (optional, type: `TRGB[]`): Array of default colors for the gradient
+# Documentation
+
+## Types
+
 ```ts
 type TRGB = {
   r: number, 
@@ -55,10 +69,11 @@ type TRGB = {
 }
 ```
 
-- `onChange` (optional): function triggered when the gradient changes (different colors, a cursor is moved, ...)
-```ts
-onChange: (colors: TRGB[]) => void;
-```
+## Parameters 
+
+ - `defaultColors` (optional, type: `TRGB[]`): Array of default colors for the gradient
+
+- `onChange` (optional, type: `(colors: TRGB[]) => void`): function triggered when the gradient changes (different colors, a cursor is moved, ...)
 
 - `gradientOptions` (optional): Options to change the way the gradient is displayed
   - `height` (optional, type: number, default: 45): Control the gradients height in pixels

@@ -30,7 +30,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
     // used to set the `selected` state to the last color that has been added 
     const [added, setAdded] = useState<number | undefined>()
 
-    /** OPTIONS - resolve undefined keys with default values **/
+    /* OPTIONS - resolve undefined keys with default values */
     const defGradOpts = Object.assign(_gradientOptions, gradientOptions);
     const defCursOpts = Object.assign(_cursorOptions, cursorOptions);
     const defPickOpts = Object.assign(_pickerOptions, pickerOptions);
@@ -39,7 +39,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
     const offset = cursorWidth / 2
 
     useEffect( () => {
-        onChange && onChange(colors)
+        if ( onChange ) onChange(colors)
 
         if ( added ) 
         {
