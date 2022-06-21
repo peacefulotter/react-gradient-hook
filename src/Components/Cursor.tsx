@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useCallback, useEffect, useState } from "react";
+import { FC, MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import Draggable, { DraggableBounds, DraggableData, DraggableEvent } from "react-draggable";
 
 import CursorTooltip from "./CursorTooltip";
@@ -33,8 +33,9 @@ interface ICursor {
 
 const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, selectColor, removeColor, setDragging, options } ) => {
 
+    const handleRef = useRef(null);
     const [style, setStyle] = useState<React.CSSProperties>();
-    const [bounds, setBounds] = useState<DraggableBounds>({left: minX, right: maxX})
+    const [bounds, setBounds] = useState<DraggableBounds>({left: minX, right: maxX});
 
     const { r, g, b } = color;
     const { height, border, shadow, scale, grid, samples } = options;
@@ -85,7 +86,7 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
     return (
         <Draggable 
             axis="x" 
-            handle=".cursor"
+            nodeRef={handleRef}
             position={{x: snappedX, y: 0}}
             bounds={bounds}
             onStop={onStop} 
@@ -93,7 +94,7 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
             onStart={onStart}
             grid={grid ? [gridSpace, 0] : undefined}
         >
-            <div className="dummy" style={{height: `${height}%`}}>
+            <div ref={handleRef} className="dummy" style={{height: `${height}%`}}>
                 <CursorTooltip pos={snappedX / width} scale={scale} onClick={removeColor}/>
                 <div className="cursor" style={style} onClick={selectColor}></div> 
             </div>
