@@ -18,6 +18,7 @@ export interface GradientProps {
 
 export interface CursorOptions {
     width?: number;
+    height?: number;
     border?: number;
     shadow?: number;
     scale?: number;

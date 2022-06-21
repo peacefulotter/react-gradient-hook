@@ -1,5 +1,6 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+
 import Gradient from './Components/Gradient'
 import { _cursorOptions, _gradientOptions } from './constants';
 
@@ -7,63 +8,62 @@ import './index.css'
 
 const styles = {
     wrapper : {
-        margin: '50px',
+        margin: '40px 0px 70px 0px',
         display: 'flex'
     },
     container: {
         margin: '20px',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        gap: '10px'
     },
     title: {
         fontSize: '1.3em',
-        marginBottom: '10px'
+        marginBottom: '10px',
+        textTransform: 'capitalize'
     }
+}
+
+const useOptionsElt = ( defaultOptions, name ) => {
+
+    const [options, setOptions] = useState(defaultOptions);
+
+    const valChange = key => ( {target} ) => {
+        target.validity.valid && setOptions(prev => ({...prev, [key]: parseInt(target.value, 10)}))
+    }
+
+    const boolChange = key => () => {
+        setOptions(prev => ({...prev, [key]: !prev[key]}))
+    }
+
+    return [ options, () => (
+        <div style={styles.container}>
+            <div style={styles.title}>{name} Options</div>
+            {
+                Object.keys(options).map((k, i) => 
+                    <div key={`${name}-opt-${i}`} style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px'}}>
+                        <div style={{textTransform: 'capitalize'}}>{k}</div>
+                        { typeof options[k] === 'number'
+                            ? <input type='number' value={options[k]} onChange={valChange(k)}></input>
+                            : <input type='checkbox' checked={options[k]} onChange={boolChange(k)}></input>
+                        }
+                    </div>
+                )
+            }
+        </div>
+    ) ]
 }
 
 const App = () => {
 
-    const [gradOptions, setGradOptions] = useState(_gradientOptions);
-    const [cursorOptions, setCursorOptions] = useState(_cursorOptions);
-
-    const gradChange = key => ({target}) => 
-        target.validity.valid && setGradOptions(prev => ({...prev, [key]: parseInt(target.value, 10)}))
-
-    const cursorChange = key => ( {target} ) => {
-        target.validity.valid && setCursorOptions(prev => ({...prev, [key]: parseInt(target.value, 10)}))
-    }
-
-    // border: 4,
-    // shadow: 2,
-    // scale: 5,
-    // grid: false,
-    // samples: 0,
-
-    const { wrapper, container, title } = styles;
+    const [gradOptions, GradientOptions] = useOptionsElt(_gradientOptions, 'gradient');
+    const [cursorOptions, CursorOptions] = useOptionsElt(_cursorOptions, 'cursor');
 
     return (
         <div>
-            <div style={wrapper}>
-                <div style={container}>
-                    <div style={title}>Gradient Options</div>
-                    Height: 
-                    <input type='number' value={gradOptions.height} onChange={gradChange('height')}></input>
-                </div>
-                <div style={container}>
-                    <div style={title}>Cursor Options</div>
-                    Width: 
-                    <input type='number' value={cursorOptions.width} onChange={cursorChange('width')}></input>
-                    Border: 
-                    <input type='number' value={cursorOptions.border} onChange={cursorChange('border')}></input>
-                    Shadow: 
-                    <input type='number' value={cursorOptions.shadow} onChange={cursorChange('shadow')}></input>
-                    Scale: 
-                    <input type='number' value={cursorOptions.scale} onChange={cursorChange('scale')}></input>
-                    Grid: 
-                    <input type='checkbox' value={cursorOptions.grid} onChange={() => setCursorOptions(prev => ({...prev, grid: !prev.grid}))}></input>
-                    Samples: 
-                    <input type='number' value={cursorOptions.samples} onChange={cursorChange('samples')}></input>
-                </div>
+            <div style={styles.wrapper}>
+                <GradientOptions />
+                <CursorOptions />
             </div>
             <Gradient 
                 gradientOptions={gradOptions}

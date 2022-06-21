@@ -101,7 +101,7 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
             <div className="gradient" ref={ref} style={gradientStyle(colors, defGradOpts)} onClick={addColor}>
                 { width > 0 && colors.map( (c: TRGB, i: number) => {
                     const minX = i === 0 ? 0 : colors[i - 1].t * width + cursorWidth
-                    const maxX = ((i + 1) >= colors.length ? 1 : colors[i + 1].t - (cursorWidth * 2 / 2) / width) * width
+                    const maxX = ((i + 1) >= colors.length ? 1 : colors[i + 1].t - (cursorWidth / width)) * width
                     return <Cursor 
                         key={`cursor-${i}`} 
                         color={c} 

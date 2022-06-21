@@ -1,25 +1,22 @@
 import { RGB, TRGB } from "./types";
 
-const gradColor = (color: TRGB) => getColorString(color) + ` ${color.t * 100}%`
 
+export const getColorString = (color: RGB) =>  `rgb(${color.r}, ${color.g}, ${color.b})`
+
+const gradColor = (color: TRGB) => getColorString(color) + ` ${color.t * 100}%`
 
 export const sortColors = ( colors: TRGB[] ) => [...colors].sort( (a: TRGB, b: TRGB) => a.t - b.t )
 
+
 export const computeGradient = ( colors: TRGB[] ): string => {
-    if ( colors.length === 0 )
-        return 'black';
-    else if ( colors.length === 1 )
-        return getColorString(colors[0])
+    if ( colors.length === 0 ) return 'black';
+    else if ( colors.length === 1 ) return getColorString(colors[0])
     
     return sortColors( colors )
         .reduce( (acc, cur, i) =>  
             acc + gradColor(cur) + (i === colors.length - 1 ? '' : ','), 
             'linear-gradient(90deg, '
         ) + ')'
-}
-
-export const getColorString = (color: RGB) => {
-    return `rgb(${color.r}, ${color.g}, ${color.b})`
 }
 
 export const interpolateColors = (colors: TRGB[], i: number, x: number): TRGB => {
@@ -43,6 +40,5 @@ export const interpolateColors = (colors: TRGB[], i: number, x: number): TRGB =>
 export const getColorOnGradient = (colors: TRGB[], pos: number): TRGB => {
     let i: number = 0;
     while ( colors[i].t < pos && ++i < colors.length );
-    console.log(pos, i);
     return interpolateColors(colors, i, pos);
 }
