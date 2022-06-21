@@ -9,7 +9,6 @@ const docsPath = path.resolve(__dirname, 'docs')
 
 const getHooksDocFiles = () => glob.sync(path.join(__dirname, 'docs', '*.md')).map((filePath) => {
 
-    // const [filename] = filePath.match(/[a-zA-Z]*/, 'gm')
     const filename = filePath.slice(docsPath.length + 1, filePath.length - '.md'.length )
     console.log('Adding', filename + '.md to the docs');
 
@@ -20,15 +19,11 @@ const getHooksDocFiles = () => glob.sync(path.join(__dirname, 'docs', '*.md')).m
   })
   
   module.exports = {
-    title: 'Todo Title',
+    title: 'react-gradient-hook',
     pagePerSection: true,
     exampleMode: 'expand',
     skipComponentsWithoutExample: true,
     styleguideDir: 'dist-docs',
-    ribbon: {
-      url: 'https://github.com/PeacefulOtter/react-gradient-hook',
-      text: 'Fork me on GitHub'
-    },
     sections: [
     //   { name: 'Introduction', content: './docs/Introduction.md', sectionDepth: 1 },
     //   { name: 'Installation', content: './docs/Installation.md', sectionDepth: 1 },
