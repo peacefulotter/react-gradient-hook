@@ -33,7 +33,7 @@
   </p>
 </div>
 
-# Examples
+## Examples
  - As a <b>hook</b>
 ```jsx harmony
 const Component = (props) => {
@@ -56,37 +56,43 @@ const Component = (props) => {
 ```
 
 
-# Documentation
+## Props
 
-## Types
+| Name | Type | Default Value | Required? | Description
+|-|-|-|-|-
+`defaultColors` | `TRGB[]` | - | No | Array of default colors for the gradient
+`onChange` | `(colors: TRGB[]) => void` | `undefined` | No | Function triggered when the gradient changes (different colors, a cursor is moved, ...)
+`gradientOptions` | `GradientOptions` | - | No | Options to change the way the gradient is displayed
+`cursorOptions` | `CursorOptions` | - | No | Options to control the behavior of the cursors (i.e. colors on the gradient)
+`pickerOptions` | `PickerOptions` | - | No | Options to control the color pickers under the gradient
 
-```ts
-type TRGB = {
-  r: number, 
-  g: number, 
-  b: number, 
-  t: number
-}
-```
+|> TRGB
+| Name | Type | Default Value | Required? | Description
+|-|-|-|-|-
+| `r` | `number` | `` | Yes | Red value 
+| `g` | `number` | `` | Yes | Green value 
+| `b` | `number` | `` | Yes | Blue value 
+| `t` | `number` | `` | Yes | Position on the gradient (from 0 to 1 included) 
 
-## Parameters 
+|> GradientOptions
+| Name | Type | Default Value | Required? | Description
+|-|-|-|-|-
+| `height` | `number` | `45` | Yes | Gradient's height in pixels
 
- - `defaultColors` (optional, type: `TRGB[]`): Array of default colors for the gradient
+|> CursorOptions
+| Name | Type | Default Value | Required? | Description
+|-|-|-|-|-
+| `width` | `number` | `15` | No | -
+| `border` | `number` | `4` | No | -
+| `shadow` | `number` | `2` | No | -
+| `scale` | `number` | `1` | No | -
+| `grid` | `boolean` | `false` | No | -
+| `samples` | `number` | `20` | No | Number of steps the cursors can take. <b>Only works</b> if `grid` is set to `true`
 
-- `onChange` (optional, type: `(colors: TRGB[]) => void`): function triggered when the gradient changes (different colors, a cursor is moved, ...)
 
-- `gradientOptions` (optional): Options to change the way the gradient is displayed
-  - `height` (optional, type: number, default: 45): Control the gradients height in pixels
-
-- `cursorOptions` (optional): Options to control the behavior of the cursors (i.e. colors on the gradient)
-  - `width` (optional, type: number, default: 15)
-  - `border` (optional, type: number, default: 4)
-  - `shadow` (optional, type: number, default: 2)
-  - `scale` (optional, type: number, default: 1)
-  - `grid` (optional, type: boolean, default: false)
-  - `samples` (optional, type: number, default: 20): Number of steps the cursors can take. <b>Only works</b> if `grid` is set to `true`
-
-- `pickerOptions` (optional): Options to control the color pickers under the gradient
-  -  `showHue` (optional, type: boolean, default: true)
-  -  `showChrome` (optional, type: boolean, default: true)
-  -  `showCircles` (optional, type: boolean, default: true)
+|> PickerOptions
+| Name | Type | Default Value | Required? | Description
+|-|-|-|-|-
+| `showHue` | `boolean` | `true` | No | -
+| `showChrome` | `boolean` | `true` | No | -
+| `showCircles` | `boolean` | `true` | No | -
