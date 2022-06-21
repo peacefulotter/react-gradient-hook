@@ -60,13 +60,13 @@ const Component = (props) => {
 
 | Name | Type | Default Value | Required? | Description
 |-|-|-|-|-
-`defaultColors` | `TRGB[]` | - | No | Array of default colors for the gradient
+`defaultColors` | `TRGB[]` | <a href="https://github.com/PeacefulOtter/react-gradient-hook/blob/4eeb5a9de8f97f190d57aa6b7478db5810bd3a3a/src/constants.ts#L3">see here</a> | No | Array of default colors for the gradient
 `onChange` | `(colors: TRGB[]) => void` | `undefined` | No | Function triggered when the gradient changes (different colors, a cursor is moved, ...)
-`gradientOptions` | `GradientOptions` | - | No | Options to change the way the gradient is displayed
-`cursorOptions` | `CursorOptions` | - | No | Options to control the behavior of the cursors (i.e. colors on the gradient)
-`pickerOptions` | `PickerOptions` | - | No | Options to control the color pickers under the gradient
+`gradientOptions` | `GradientOptions` | <a href="https://github.com/PeacefulOtter/react-gradient-hook/blob/4eeb5a9de8f97f190d57aa6b7478db5810bd3a3a/src/constants.ts#L10">see here</a> | No | Options to change the way the gradient is displayed
+`cursorOptions` | `CursorOptions` | <a href="https://github.com/PeacefulOtter/react-gradient-hook/blob/4eeb5a9de8f97f190d57aa6b7478db5810bd3a3a/src/constants.ts#L14">see here</a> | No | Options to control the behavior of the cursors (i.e. colors on the gradient)
+`pickerOptions` | `PickerOptions` | <a href="https://github.com/PeacefulOtter/react-gradient-hook/blob/4eeb5a9de8f97f190d57aa6b7478db5810bd3a3a/src/constants.ts#L24">see here</a> | No | Options to control the color pickers under the gradient
 
-|> TRGB
+### TRGB
 | Name | Type | Default Value | Required? | Description
 |-|-|-|-|-
 | `r` | `number` | `` | Yes | Red value 
@@ -74,12 +74,12 @@ const Component = (props) => {
 | `b` | `number` | `` | Yes | Blue value 
 | `t` | `number` | `` | Yes | Position on the gradient (from 0 to 1 included) 
 
-|> GradientOptions
+### GradientOptions
 | Name | Type | Default Value | Required? | Description
 |-|-|-|-|-
 | `height` | `number` | `45` | Yes | Gradient's height in pixels
 
-|> CursorOptions
+### CursorOptions
 | Name | Type | Default Value | Required? | Description
 |-|-|-|-|-
 | `width` | `number` | `15` | No | -
@@ -90,7 +90,7 @@ const Component = (props) => {
 | `samples` | `number` | `20` | No | Number of steps the cursors can take. <b>Only works</b> if `grid` is set to `true`
 
 
-|> PickerOptions
+### PickerOptions
 | Name | Type | Default Value | Required? | Description
 |-|-|-|-|-
 | `showHue` | `boolean` | `true` | No | -
