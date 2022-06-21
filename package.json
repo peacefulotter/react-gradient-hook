@@ -1,6 +1,6 @@
 {
   "name": "react-gradient-hook",
-  "version": "1.4.12",
+  "version": "1.4.13",
   "description": "React hook to create gradients",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
