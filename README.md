@@ -60,19 +60,21 @@ const Component = (props) => {
 
 | Name | Type | Default Value | Required? | Description
 |-|-|-|-|-
-`defaultColors` | `TRGB[]` | <a href="https://github.com/PeacefulOtter/react-gradient-hook/blob/4eeb5a9de8f97f190d57aa6b7478db5810bd3a3a/src/constants.ts#L3">see here</a> | No | Array of default colors for the gradient
+`defaultColors` | `TRGB[]` | <a href="#trgb">see here</a> | No | Array of default colors for the gradient
 `onChange` | `(colors: TRGB[]) => void` | `undefined` | No | Function triggered when the gradient changes (different colors, a cursor is moved, ...)
-`gradientOptions` | `GradientOptions` | <a href="https://github.com/PeacefulOtter/react-gradient-hook/blob/4eeb5a9de8f97f190d57aa6b7478db5810bd3a3a/src/constants.ts#L10">see here</a> | No | Options to change the way the gradient is displayed
-`cursorOptions` | `CursorOptions` | <a href="https://github.com/PeacefulOtter/react-gradient-hook/blob/4eeb5a9de8f97f190d57aa6b7478db5810bd3a3a/src/constants.ts#L14">see here</a> | No | Options to control the behavior of the cursors (i.e. colors on the gradient)
-`pickerOptions` | `PickerOptions` | <a href="https://github.com/PeacefulOtter/react-gradient-hook/blob/4eeb5a9de8f97f190d57aa6b7478db5810bd3a3a/src/constants.ts#L24">see here</a> | No | Options to control the color pickers under the gradient
+`gradientOptions` | `GradientOptions` | <a href="#gradientoptions">see here</a> | No | Options to change the way the gradient is displayed
+`cursorOptions` | `CursorOptions` | <a href="#cursoroptions">see here</a> | No | Options to control the behavior of the cursors (i.e. colors on the gradient)
+`pickerOptions` | `PickerOptions` | <a href="#pickeroptions">see here</a> | No | Options to control the color pickers under the gradient
+
+## Types 
 
 ### TRGB
-| Name | Type | Default Value | Required? | Description
+| Name | Type | Required? | Description
 |-|-|-|-|-
-| `r` | `number` | `` | Yes | Red value 
-| `g` | `number` | `` | Yes | Green value 
-| `b` | `number` | `` | Yes | Blue value 
-| `t` | `number` | `` | Yes | Position on the gradient (from 0 to 1 included) 
+| `r` | `number` | Yes | Red value 
+| `g` | `number` | Yes | Green value 
+| `b` | `number` | Yes | Blue value 
+| `t` | `number` | Yes | Position on the gradient (from 0 to 1 included) 
 
 ### GradientOptions
 | Name | Type | Default Value | Required? | Description
