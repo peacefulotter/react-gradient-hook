@@ -1,14 +1,14 @@
 {
   "name": "react-gradient-hook",
-  "version": "1.4.11",
+  "version": "1.4.12",
   "description": "React hook to create gradients",
   "main": "lib/index.js",
-  "module": "esm/index.js",
+  "module": "lib/esm/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "react-scripts start",
     "test": "jest --config jestconfig.json",
-    "netlify": "react-scripts build",
+    "netlify": "react-scripts dist",
     "clean": "rm -rf ./lib",
     "prebuild": "npm run clean",
     "build-cjs": "tsc --project ./tsconfig.cjs.json",
