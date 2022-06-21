@@ -70,7 +70,7 @@ const Component = (props) => {
 
 ### TRGB
 | Name | Type | Required? | Description
-|-|-|-|-|-
+|-|-|-|-
 | `r` | `number` | Yes | Red value 
 | `g` | `number` | Yes | Green value 
 | `b` | `number` | Yes | Blue value 
