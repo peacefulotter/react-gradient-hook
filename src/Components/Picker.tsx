@@ -14,7 +14,7 @@ interface IPicker {
 const Picker: FC<IPicker> = ( { color, pickColor, options } ) => {
     return (
         <div className="picker-wrapper"> 
-            { options.showHue ? <SliderPicker color={color} onChange={pickColor}/> : null }
+            { options.showHue ? <SliderPicker color={color} onChange={pickColor} /> : null }
             { options.showChrome ? <ChromePicker color={color} onChange={pickColor} disableAlpha={true}/> : null }
             { options.showCircles ? <CirclePicker color={color} onChange={pickColor} /> : null }
         </div>

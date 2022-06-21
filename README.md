@@ -35,7 +35,7 @@
 
 # Examples
  - As a <b>hook</b>
-```ts
+```jsx harmony
 const Component = (props) => {
   const [colors, gradient] = useGradient({options})
   ...
@@ -46,7 +46,7 @@ const Component = (props) => {
 ```
 
  - As a <b>Component</b>
-```ts
+```jsx harmony
 const Component = (props) => {
   ...
   return (

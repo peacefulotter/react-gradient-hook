@@ -1,6 +1,6 @@
 {
   "name": "react-gradient-hook",
-  "version": "1.4.9",
+  "version": "1.4.10",
   "description": "React hook to create gradients",
   "main": "lib/index.js",
   "module": "esm/index.js",
@@ -8,9 +8,7 @@
   "scripts": {
     "start": "react-scripts start",
     "test": "jest --config jestconfig.json",
-
     "netlify": "react-scripts build",
-
     "clean": "rm -rf ./lib",
     "prebuild": "npm run clean",
     "build-cjs": "tsc --project ./tsconfig.cjs.json",
@@ -26,7 +24,9 @@
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
     "lint": "tslint -p tsconfig.json",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "build-docs": "npx del-cli dist-docs && npx styleguidist build",
+    "serve-docs": "npx styleguidist server"
   },
   "browserslist": [
     ">1%",
@@ -69,10 +69,12 @@
     "@types/react-color": "^3.0.6",
     "copyfiles": "^2.4.1",
     "cypress": "^10.1.0",
+    "glob": "^8.0.3",
     "jest": "^28.1.1",
     "prettier": "^2.7.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1",
+    "react-styleguidist": "^11.2.0",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.5",
     "tslint": "^6.1.3",

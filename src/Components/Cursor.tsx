@@ -49,6 +49,10 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
         setBounds({left: snapToGrid(minX), right: snapToGrid(maxX) })
     }, [minX, maxX])
 
+    useEffect( () => {
+        setX( snapToGrid(color.t * width) / width ) 
+    }, [grid, samples])
+
     const snapToGrid = (x: number) => {
         if ( grid && samples )
         {
