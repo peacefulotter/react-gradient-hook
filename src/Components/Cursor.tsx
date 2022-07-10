@@ -14,7 +14,7 @@ const getCursorStyle = (color: RGB, { width, border, shadow }: CursorOptions, se
     background: getColorString(color),
     width: width + 'px',
     borderWidth: border + 'px',
-    boxShadow: `0 0 0 ${shadow}px black ${selected ? ', 0px 0px 1px 3px rgba(0, 0, 0, 0.3)': ''}`,
+    boxShadow: `0 0 0 ${shadow}px black ${selected ? ', 0px 0px 2px 3px rgba(0, 0, 0, 0.6)': ''}`,
     transform: `translate(-${(width / 2 + border)}px, -${border}px)`,
 } )
 
