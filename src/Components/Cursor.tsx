@@ -18,13 +18,18 @@ const getCursorStyle = (color: RGB, { width, border, shadow }: CursorOptions, se
     transform: `translate(-${(width / 2 + border)}px, -${border}px)`,
 } )
 
+const preventProp = (e: DraggableEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+}
+
 interface ICursor {
     color: TRGB;
     selected: boolean;
     width: number;
     minX: number;
     maxX: number;
-    setX: (t: number) => void;
+    setX: (t: number, min: number, max: number) => void;
     removeColor: (event: MouseEvent<HTMLDivElement>) => void;
     selectColor: (event: MouseEvent<HTMLDivElement>) => void;
     setDragging: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,67 +40,59 @@ const Cursor: FC<ICursor> = ( { color, selected, width, minX, maxX, setX, select
 
     const handleRef = useRef(null);
     const [style, setStyle] = useState<React.CSSProperties>();
-    const [bounds, setBounds] = useState<DraggableBounds>({left: minX, right: maxX});
+    const [startX, setStartX] = useState<number>(0); // used when grid is true
 
     const { r, g, b } = color;
     const { height, border, shadow, scale, grid, samples } = options;
-
-    const gridSpace = width / samples
-
+    
     useEffect( () => {
         setStyle(getCursorStyle(color, options, selected))
     }, [r, g, b, options.width, border, shadow, selected])
 
     useEffect( () => {
-        setBounds({left: snapToGrid(minX), right: snapToGrid(maxX) })
-    }, [minX, maxX])
-
-    useEffect( () => {
-        setX( snapToGrid(color.t * width) / width ) 
+        setX( color.t, minX, maxX ) 
     }, [grid, samples])
 
-    const snapToGrid = (x: number) => {
-        if ( grid && samples )
-        {
-            const gridX = Math.round(x / gridSpace) * gridSpace;
-            return Math.min(maxX, Math.max(minX, gridX))
-        }
-        return x
+    const onStart = (e: DraggableEvent, data: DraggableData) => {
+        preventProp(e);
+        setStartX( data.x )
     }
-
-    const preventProp = (e: DraggableEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
-    }
-
-    const onStart = preventProp
     
-    const onDrag = useCallback( (e: DraggableEvent, {x}: DraggableData) => {
+    const onDrag = (e: DraggableEvent, data: DraggableData) => {
         preventProp(e)
-        setX( snapToGrid(x) / width ) 
-        setDragging(true)
-    }, [setX, setDragging, width] )
 
-    const onStop = (e: DraggableEvent, data: DraggableData) => {
+        if ( grid && Math.abs(data.x - startX) > (width / samples) )
+        {
+            const x = color.t + Math.sign(data.x - startX) / samples;
+            setX( x, minX, maxX )
+            setStartX( data.x )
+        }
+        else if ( !grid )
+        {
+            const delta = data.deltaX;
+            const t = color.t + (delta / width)
+            setX( t, minX, maxX ) 
+        }
+
+        setDragging(true)
+    }
+
+    const onStop = (e: DraggableEvent) => {
         preventProp(e)
         setTimeout( () => setDragging(false), DRAGGING_TIMEOUT )
     }
 
-    const snappedX = snapToGrid(color.t * width)
-
     return (
         <Draggable 
-            axis="x" 
+            axis="none" 
             nodeRef={handleRef}
-            position={{x: snappedX, y: 0}}
-            bounds={bounds}
+            position={null}
             onStop={onStop} 
             onDrag={onDrag}
             onStart={onStart}
-            grid={grid ? [gridSpace, 0] : undefined}
         >
-            <div ref={handleRef} className="dummy" style={{height: `${height}%`}}>
-                <CursorTooltip pos={snappedX / width} scale={scale} onClick={removeColor}/>
+            <div ref={handleRef} className="dummy" style={{left: `${color.t * 100}%`, height: `${height}%`}}>
+                <CursorTooltip t={color.t} scale={scale} onClick={removeColor}/>
                 <div className="cursor" style={style} onClick={selectColor}></div> 
             </div>
         </Draggable>

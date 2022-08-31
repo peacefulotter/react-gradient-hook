@@ -31,17 +31,16 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
     // used to set the `selected` state to the last color that has been added 
     const [added, setAdded] = useState<number | undefined>()
 
-    /* OPTIONS - resolve undefined keys with default values */
-    const defGradOpts = useOptions(gradientOptions, _gradientOptions)
-    const defCursOpts = useOptions(cursorOptions, _cursorOptions)
-    const defPickOpts = useOptions(pickerOptions, _pickerOptions)
+    // resolve undefined option keys with default values
+    const gradOpts = useOptions(gradientOptions, _gradientOptions)
+    const cursOpts = useOptions(cursorOptions, _cursorOptions)
+    const pickOpts = useOptions(pickerOptions, _pickerOptions)
 
-    const cursorWidth = defCursOpts.width + defCursOpts.border * 2
+    const cursorWidth = cursOpts.width + cursOpts.border * 2
     const offset = cursorWidth / 2
 
     useEffect( () => {
         if ( onChange ) onChange(colors)
-
         if ( added ) 
         {
             setAdded(undefined)
@@ -49,11 +48,17 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
         }
     }, [colors]) 
 
+    const snapToGrid = (t: number) => {
+        const { grid, samples } = cursOpts;
+        return grid ? Math.round(t * samples) / samples : t
+    }
+
+    // FIXME: shouldnt be able to add a color if grid=true and two cursors are surrounding the new pos
     const addColor = useCallback( ({clientX, target}: MouseEvent<HTMLDivElement>) => {
         if ( dragging ) return;
         const pos = (clientX - (target as any).offsetLeft) / width
         const rgb = getColorOnGradient(colors, pos)
-        const trgb = { ...rgb, t: pos }
+        const trgb = { ...rgb, t: snapToGrid(pos) }
         const update = sortColors([...colors, trgb])
         setColors( update )
         setAdded( update.findIndex( (c: TRGB) => c === trgb) )
@@ -77,10 +82,13 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
         setSelected( Math.max(0, selected - 1) )
     }, [colors, setColors] )
 
-    const setX = useCallback( (i: number) => (t: number) => {
+    const setX = useCallback( (i: number) => (t: number, min: number, max: number) => {
+        // bound the translation to [min, max]
+        // snap translation to grid if grid is set to true
+        const mappedT = Math.min( max, Math.max( min, snapToGrid(t) ) )
         setColors( prev => {
             const temp = [...prev]
-            temp[i].t = t
+            temp[i].t = mappedT
             return temp
         } );
     }, [colors, setColors] )
@@ -98,10 +106,10 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
 
     return (
         <div className="gradient-wrapper" style={{padding: `0px ${offset}px`}}>
-            <div className="gradient" ref={ref} style={gradientStyle(colors, defGradOpts)} onClick={addColor}>
+            <div className="gradient" ref={ref} style={gradientStyle(colors, gradOpts)} onClick={addColor}>
                 { width > 0 && colors.map( (c: TRGB, i: number) => {
-                    const minX = i === 0 ? 0 : colors[i - 1].t * width + cursorWidth
-                    const maxX = ((i + 1) >= colors.length ? 1 : colors[i + 1].t - (cursorWidth / width)) * width
+                    const minX = i === 0 ? 0 : colors[i - 1].t  + cursorWidth / width
+                    const maxX = ((i + 1) >= colors.length ? 1 : colors[i + 1].t - (cursorWidth / width))
                     return <Cursor 
                         key={`cursor-${i}`} 
                         color={c} 
@@ -113,11 +121,11 @@ const Gradient: FC<IGradient> = ( { defaultColors, gradientOptions, cursorOption
                         selectColor={selectColor(i)}
                         removeColor={removeColor(i)}
                         setDragging={setDragging}
-                        options={defCursOpts}
+                        options={cursOpts}
                     />
                 } ) }
             </div>
-            <Picker color={colors[selected]} pickColor={pickColor(selected)} options={defPickOpts} />
+            <Picker color={colors[selected]} pickColor={pickColor(selected)} options={pickOpts} />
         </div>
     )
 }
